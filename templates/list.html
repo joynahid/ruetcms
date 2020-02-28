@@ -1,0 +1,76 @@
+{% extends 'defaults/authlayout.html' %}
+{% block title %} Generated Ranklist {%endblock%}
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+    <i class="fas fa-info-circle"></i> {{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<div class="card bg-white rounded shadow-sm">
+    <div class="card-body p-5">
+        <h5 class="card-title">
+            <div class="d-flex">
+                <div class="mr-auto">Ranklist</div>
+                <div class="p-2 text-success"><small><i class="fas fa-square"></i> CF</small></div>
+                <div class="p-2 text-primary"><small><i class="fas fa-square"></i> VJ</small></div>
+            </div>
+        </h5>
+        <table class="table shadow-sm table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Solved</th>
+                    <th scope="col">Penalty (Seconds)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in res %}
+                <tr>
+                    <th scope="row">{{ i['position']}}</td>
+                    <td>{{ i['person'] }}</td>
+                    <td>{{ i['solved'] }}</td>
+                    <td>{{ i['penalty'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h6 class="card-subtitle mb-3 text-muted">{% for i in arr['vjudge'] %}
+            <a href="https://vjudge.net/contest/{{i}}" target="_blank" class="card-link">{{i}}</a>&nbsp
+            {% endfor %}
+            {% for i in arr['codeforces'] %}
+            <a href="https://codeforces.com/contest/{{i}}/standings" target="_blank" class="card-link text-success">{{i}}</a>&nbsp
+            {% endfor %}
+        </h6>
+        <div class="mt-5">
+            <a href="#" id="triggerData" class="card-link"><i class="fas fa-file-pdf pr-2"></i> Get PDF</a>
+        </div>
+        <hr>
+        <div class="mt-2">
+            <a href="{{request.referrer}}" class="card-link"><i class="fas fa-arrow-left pr-2"></i> Generate Again</a>
+        </div>
+    </div>
+</div>
+</div>
+<form style="display: none;" action="" method="get" id="dataForm">
+    <input type="text" name="vjdata" value="{{arr['vjudge']}}">
+    <input type="text" name="cfdata" value="{{arr['codeforces']}}">
+</form>
+</form>
+{%endblock%}
+{%block script%}
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#triggerData").click(function() {
+        $("#dataForm").submit();
+    });
+});
+</script>
+{%endblock%}

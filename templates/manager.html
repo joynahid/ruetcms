@@ -1,0 +1,80 @@
+{% extends 'defaults/authlayout.html' %}
+{% block title %} Manager Mode | RUETCMS {%endblock%}
+{% block content %}
+<div class="card bg-white shadow-sm">
+    <div class="card-header bg-dark text-white">
+        Manager
+    </div>
+    <div class="p-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            <i class="fas fa-info-circle"></i> {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <div class="card m-2">
+            <div class="card-body">
+                <h5 class="card-title">Upload Ranklist</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Please upload a valid <b>.csv</b> file and input a valid Contest ID.</h6>
+                <form action="{{url_for('manager')}}" enctype="multipart/form-data" method="POST">
+                    <div class="form-group">
+                        <label for="csvuplaoder">Select a CSV file</label>
+                        <input type="file" name="file" class="form-control-file" id="csvuploader">
+                    </div>
+                    <div class="form-group">
+                        <label for="filename">Contest ID</label>
+                        <input type="number" class="form-control" name="filename" id="filename" placeholder="8347638" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2">Upload</button>
+                </form>
+            </div>
+        </div>
+        <div class="card m-2">
+            <div class="card-body">
+                <h5 class="card-title">Ranklist Generator</h5>
+                <!-- <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> -->
+                <form method='get' action="{{url_for('generate_ranklist')}}" id="contest">
+                    <div class="form-group mb-4">
+                        <label for="listvj">Vjudge Contest IDs (Space Separated)</label>
+                        <input type="text" class="form-control" name="listvj" id="listvj" placeholder="8347638 987553">
+                        <div class="card-text" id='recentvj' style="display: none;">
+                            <small>Recently added contests:
+                                {%for i in available_contest%}
+                                <a href="http://vjudge.net/contest/{{i}}" target="_blank" class="card-link">{{i}}</a>
+                                {%endfor%}
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="listcf">Codeforces Contest IDs (Space Separated)</label>
+                        <input type="text" class="form-control" name="listcf" id="listcf" placeholder="8347 7553">
+                    </div>
+                    <button type="submit" class="btn btn-success mb-2" id="sub"><span>Generate</span></button> <span id="loading" style="visibility: hidden; padding-left: 5px"><span class="pl-2"><i class="fas fa-circle-notch fa-spin fa-lg"></i></span></span>
+                </form>
+                <div id="show" style="visibility: hidden;"><span></span></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{%block script%}
+<script type="text/javascript">
+$("#listvj").focus(function() {
+    $("#recentvj").css("display", "block")
+});
+$(document).ready(function() {
+    $('#contest').submit(function() {
+        $('#loading').css('visibility', 'visible');
+        $("#sub").prop('disabled', true);
+        $("#sub").css({ 'background': 'black', 'color': 'white' });
+        $("#sub span").text('Working...');
+    });
+});
+</script>
+{%endblock%}

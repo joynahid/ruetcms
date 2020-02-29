@@ -12,7 +12,7 @@ Tools
 
 How to install?
 -----------------
-First install python3 virtual environment. And activate it. Then clone this repository in your virtual environment and install all the requirements using pip. The codes below will work for Ubuntu/ Debian.
+First install python3 virtual environment. And activate it. Then clone this repository in your virtual environment and install all the requirements using pip. The codes below will work for Ubuntu/Debian.
 
     # clone the repository
     $ git clone https://github.com/joynahid/ruetcms.git

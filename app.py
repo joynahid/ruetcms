@@ -350,7 +350,6 @@ def profile(username):
     auth = getProfileData(username)
     gen = getcfinfo(auth['ojinfo']['codeforces'])
     color = gen['maxRank']
-
     return render_template('profile.html', auth=auth, user=auth['ojinfo']['codeforces'], info=gen, color=cfcolor[color])
 
 

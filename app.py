@@ -347,7 +347,6 @@ def logout():
 
 @app.route('/profile/<username>')
 def profile(username):
-    print(username)
     auth = getProfileData(username)
     gen = getcfinfo(auth['ojinfo']['codeforces'])
     color = gen['maxRank']

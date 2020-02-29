@@ -4,8 +4,6 @@
 {% block fullcontent %}
 
 <div class="row">
-
-
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     {% for category, message in messages %}
@@ -62,7 +60,8 @@
                 Codeforces
             </div>
             <div class="display-4 pb-4" style="font-size: 2em;">
-                <b><a href="https://codeforces.com/profile/{{auth['ojinfo']['codeforces']}}" target="_blank">{{auth['ojinfo']['codeforces']}}</a></b>
+                <b><a href="https://codeforces.com/profile/{{auth['ojinfo']['codeforces']}}"
+                        target="_blank">{{auth['ojinfo']['codeforces']}}</a></b>
             </div>
 
             <div class="display-4" style="font-size: 1.5em;">
@@ -73,7 +72,89 @@
             </div>
 
         </div>
+
+        <canvas id="myChart" width="400"></canvas>
     </div>
 </div>
 
 {% endblock %}
+
+{%block script%}
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $.ajax({
+            type: "GET",
+            url: "https://codeforces.com/api/user.rating?handle=" + "{{ info['handle'] }}",
+            data: '',
+            success: function (data) {
+                var cnt = 1;
+
+                var lbls = [];
+                var dd = [];
+                var bgcolor = [];
+
+                function getRandomColor() {
+                    var letters = 'ABCDEF0123456789';
+                    var color = '#';
+                    for (var i = 0; i < 6; i++) {
+                        color += letters[Math.floor(Math.random() * 16)];
+                    }
+                    return color;
+                }
+
+                $.each(data.result, function (key, element) {
+                    lbls.push(element.newRating);
+                    dd.push(cnt++);
+                    bgcolor.push(getRandomColor());
+
+
+                    var ctx = document.getElementById('myChart').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: dd,
+                            datasets: [{
+                                backgroundColor: "transparent",
+                                label: 'Rating',
+                                data: lbls,
+                                fill: false,
+                                borderColor: ['{{color}}'],
+                                pointBackgroundColor: bgcolor,
+                                borderWidth: 3,
+                                pointRadius: 2
+                            }]
+                        },
+                        options: {
+                            tooltips: { enabled: false },
+                            hover: { mode: null },
+                            title: {
+                                display: true,
+                                text: 'Rating Curve'
+                            },
+                            legend: {
+                                display: false
+                            },
+                            scales: {
+                                xAxes: [{
+                                    gridLines: {
+                                        display: true
+                                    }
+                                }],
+                                yAxes: [{
+                                    gridLines: {
+                                        display: true
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                });
+            },
+            error: function (xmlHttpRequest, textStatus, errorThrown) {
+                alert(errorThrown);
+            }
+        });
+    });
+</script>
+{%endblock%}

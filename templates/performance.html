@@ -22,13 +22,20 @@
 
         <form id='contestids'>
             <div class="form-group">
-                <div class="form-group">
-                    <label for="cfid" class="col-form-label">Contest Number</label>
-                    <div class="col-sm-8 p-0">
-                        <input type="text" class="form-control" id="cfid" placeholder="1303">
-                    </div>
+                <label for="cfid" class="col-form-label">Contest Number</label>
+                <div class="col-sm-8 p-0">
+                    <input type="text" class="form-control" id="cfid" placeholder="1303">
                 </div>
+                <div class="col-sm-8 p-0">
+                    <input type="text" class="form-control" id="weight" placeholder="12">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success mb-2" id="sub"><span>Generate</span></button> <span
+                id="loading" style="visibility: hidden; padding-left: 5px"><span class="pl-2"><i
+                        class="fas fa-circle-notch fa-spin fa-lg"></i></span></span>
         </form>
+
+        <div id="title" style="hidden" class="pb-2 pt-2"></div>
 
         <table class="table shadow-sm table-bordered" id="mainlist">
             <thead class="thead-dark">
@@ -53,9 +60,14 @@
         </div> -->
     </div>
 </div>
-</div>
 
 {%endblock%}
+
+
+{%block sidebar%}
+<canvas id="myChart" width="400" height="400"></canvas>
+{%endblock%}
+
 {%block script%}
 
 <script type="text/javascript">
@@ -67,25 +79,121 @@
 
             e.preventDefault();
 
-            cid = $('input:first').val()
+            $('#loading').css('visibility', 'visible');
+            $("#sub").prop('disabled', true);
+            $("#sub").css({ 'background': 'black', 'color': 'white' });
+            $("#sub span").text('Working...');
+
+            $('#myChart').empty();
+
+            cid = $('input:first').val();
+            wt = $('#weight').val();
 
             $.ajax({
                 type: "GET",
-                url: "{{url_for('performance')}}" + '?contestid=' + cid,
-                data: 'data',
+                url: 'https://codeforces.com/api/contest.standings?contestId=' + cid + '&from=1&count=1&showUnofficial=true',
+                data: '',
+                success: function (data) {
+                    $("#title").text('Showing report from ' + data.result.contest.name).fadeIn('slow');
+                }
+            });
+
+            // console.log(wt);
+
+            $.ajax({
+                type: "GET",
+                url: "{{url_for('performance')}}" + '?contestid=' + cid + '&weight=' + wt,
+                data: '',
                 success: function (data) {
                     $('#mainlist').find('tbody').empty();
                     $('#mainlist').find('tbody').hide();
                     var cnt = 1;
+
+                    var lbls = [];
+                    var dd = [];
+                    var bgcolor = [];
+
+                    function getRandomColor() {
+                        var letters = 'ABCDEF0123456789';
+                        var color = '#';
+                        for (var i = 0; i < 6; i++) {
+                            color += letters[Math.floor(Math.random() * 16)];
+                        }
+                        return color;
+                    }
+
+
                     $.each(data, function (key, element) {
-                        var htm = "<tr><td>" + cnt++ + "</td><td>" + element.id + "</td> <td>" + element.capability.toFixed(2) + "%</td><td>" + element.time.toFixed(2) + " minutes</td></tr>";
+                        var htm = "<tr><td>" + cnt + "</td><td>" + element.id + "</td> <td>" + element.capability + "%</td><td>" + element.time + " minutes</td></tr>";
+                        
+                        console.log(htm)
+
+                        lbls.push(element.capability);
+                        dd.push(cnt++);
+                        bgcolor.push(getRandomColor());
                         $('#mainlist').find('tbody').append(htm);
                     });
 
+                    if (cnt == 0) {
+                        $('#mainlist').find('tbody').append('<tr colspan=4>No Data Found</tr>')
+                    }
+
+                    // Chart.defaults.global.title('bottom');
+
+                    var ctx = document.getElementById('myChart').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: dd,
+                            datasets: [{
+                                label: 'Capabilitis (%)',
+                                data: lbls,
+                                borderColor: bgcolor,
+                                pointBackgroundColor: bgcolor,
+                                borderWidth: 4,
+                                pointRadius: 3
+                            }]
+
+                        },
+                        options: {
+                            title: {
+                                display: true,
+                                text: 'Capability Chart'
+                            },
+                            legend: {
+                                display: false
+                            },
+                            scales: {
+                                xAxes: [{
+                                    gridLines: {
+                                        display: false
+                                    }
+                                }],
+                                yAxes: [{
+                                    gridLines: {
+                                        display: false
+                                    }
+                                }]
+                            }
+                        }
+                    });
+
                     $('#mainlist').find('tbody').fadeIn();
+
+
+                    $('#loading').css('visibility', 'hidden');
+                    $("#sub").prop('disabled', false);
+                    $("#sub").css({ 'background': '', 'color': '' });
+                    $("#sub span").text('Generate');
+
                 },
                 error: function (xmlHttpRequest, textStatus, errorThrown) {
+                    $('#loading').css('visibility', 'hidden');
+                    $("#sub").prop('disabled', false);
+                    $("#sub").css({ 'background': '', 'color': '' });
+                    $("#sub span").text('Generate');
                     alert(errorThrown);
+                    
                 }
             });
         });

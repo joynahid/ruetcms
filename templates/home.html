@@ -22,7 +22,8 @@
     </div>
     <div class="card-body">
         <ul class="list-group list-group-flush">
-            <li class="list-group-item"><a href="{{url_for('manager')}}">Manager Mode</a> <span class="badge badge-primary badge-pill">new</span></li>
+            <li class="list-group-item"><a href="{{url_for('manager')}}">Manager Mode</a> <span
+                    class="badge badge-primary badge-pill">new</span></li>
             <li class="list-group-item"><a href="{{url_for('performance')}}">Codeforces Manager</a></li>
         </ul>
     </div>
@@ -36,7 +37,8 @@
         <p style="font-size: 18px;"> <b>{{auth['personal']['firstname']}}</b></p>
         <hr>
         <p class="p-0 m-0" style="font-weight: bold;"><small>
-                <span id="fletter" style="color:{{color}}; text-transform: uppercase; font-weight: bold; font-size: 12">{{ info['maxRank'] }}</span>
+                <span id="fletter"
+                    style="color:{{color}}; text-transform: uppercase; font-weight: bold; font-size: 12">{{ info['maxRank'] }}</span>
             </small>
         </p>
         <p id='rating'>{{ info['maxRating'] }}</p>
@@ -45,11 +47,11 @@
 {%endblock%}
 {%block script%}
 <script type="text/javascript">
-var tm = $("#rating").text();
-var text = '<span style="color:black">' + $('#fletter').text().charAt(0) + '</span>';
-var x = parseInt(tm)
-if (x >= 3000) {
-    $("#fletter").html(text + $('#fletter').text().slice(1, $('#fletter').text().length));
-}
+    var tm = $("#rating").text();
+    var text = '<span style="color:black">' + $('#fletter').text().charAt(0) + '</span>';
+    var x = parseInt(tm)
+    if (x >= 3000) {
+        $("#fletter").html(text + $('#fletter').text().slice(1, $('#fletter').text().length));
+    }
 </script>
 {%endblock%}

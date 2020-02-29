@@ -32,13 +32,13 @@ protobuf==3.11.3
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycparser==2.19
-pycryptodome==3.4.3
+pycryptodome>=3.6.6
 pylint==2.4.4
 PyMySQL==0.9.3
 Pyphen==0.9.5
 Pyrebase==3.0.27
 python-jwt==2.0.1
-requests==2.11.1
+requests>=2.20.0
 requests-toolbelt==0.7.0
 rsa==4.0
 six==1.14.0

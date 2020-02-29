@@ -64,10 +64,33 @@ def Auth():
     alloj = cursor.fetchone()
     cursor.close()
 
-    # print(alloj)
+    currentUserInfo = {
+    	'personal' : {
+	    	'username' : all[1],
+	    	'firstname' : all[2],
+	    	'lastname' : all[3],
+	    	'email' : all[4],
+	    },
+
+    	'ojinfo' : {
+    		'codeforces': alloj[1],
+    		'vjudge': alloj[2],
+    	}
+    }
+
+    return currentUserInfo
+
+
+def getProfileData(username):
+    con = mysql.connect()
+    cursor = con.cursor()
+    cursor.execute(f'''SELECT * FROM accounts WHERE username = "{username}"''')
+    all = cursor.fetchone()
+    cursor.execute(f'''SELECT * FROM ojinfo WHERE id = {all[0]}''')
+    alloj = cursor.fetchone()
+    cursor.close()
 
     currentUserInfo = {
-
     	'personal' : {
 	    	'username' : all[1],
 	    	'firstname' : all[2],
@@ -126,7 +149,7 @@ def generate_ranklist():
 
 			res = generateFavorite(vjcontests,cfcontests)
 
-			flash(f'Ranklist generated successfully! ({(time.time() - start_time)} seconds)', 'success')
+			flash(f'Ranklist generated successfully! ({round((time.time() - start_time),2)} seconds)', 'success')
 			return render_template('list.html', auth = Auth(), res = res, arr= contests)
 		return "Invalid Request"
 
@@ -138,12 +161,12 @@ def manager():
     if request.method == 'POST':
         if 'file' not in request.files:
             flash('No file selected', 'danger')
-            return render_template('manager.html', auth = Auth(), available_contest = db.child('contests').child('vjudge').get().val())
+            return render_template('manager.html', auth = Auth())
         file = request.files['file']
 
         if request.form['filename'] == '':
             flash('No selected file', 'danger')
-            return render_template('manager.html', auth = Auth(), available_contest = db.child('contests').child('vjudge').get().val())
+            return render_template('manager.html', auth = Auth())
 
         file.filename = 'vjudge_rank_' + request.form['filename'] + '.csv'
 
@@ -153,7 +176,7 @@ def manager():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             flash('Successfully updated.', 'success')
-            return render_template('manager.html', auth = Auth(), available_contest = db.child('contests').child('vjudge').get().val())
+            return render_template('manager.html', auth = Auth())
 
     auth = Auth()
 
@@ -161,105 +184,17 @@ def manager():
         flash('You must login first', 'warning')
         return redirect(url_for('login'))
 
-    return render_template('manager.html', auth = auth, available_contest = db.child('contests').child('vjudge').get().val())
-
-# def codeforcesManager():
-#     session.pop('_flashes',None)
-
-#     if Auth() == False:
-#         flash('You must login first!')
-#         return redirect(url_for('login'))
-
-#     if request.method == 'GET':
-#     	arr = list(map(int,request.args.get().strip().split()))
-
-#     	import analyzer
-
-#     	upDateCfContests(arr)
-
-#     return render_template('codeforces.html')
-
+    return render_template('manager.html', auth = auth)
 
 # 404 Page
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html')
 
-# @app.route('/judgeme')
-# def jdge():
-#     judge('''#include <bits/stdc++.h>
-# 	using namespace std;
-
-# 	int main()
-# 	{
-# 		int x;
-# 		cin >> x
-
-# 		cout << x << endl;
-
-# 		return 0;
-# 	}''', '20')
-#     return "done"
-
 # CODEFORCES Information grabber
 def getcfinfo(handle):
     user = req(f'user.info?handles={handle}', False)
     return user['result'][0]
-
-# def cfCcontestAnalysis():
-#     response = req('contest.list?gym=false')
-
-#     # 20 iterations
-#     for i in response['result']:
-#         if i['type'] == 'CF' and i['phase'] == 'FINISHED':
-#             cId = i['id']
-#             break
-
-#     sql = '''SELECT handle_cf FROM ojinfo'''
-#     con = mysql.connect()
-#     cursor = con.cursor()
-#     cursor.execute(sql)
-#     data = cursor.fetchall()
-#     con.commit()
-#     cursor.close()
-#     handles = []
-
-#     for i in data:
-#     	handles.append(i[0])
-
-#     contestant = []
-
-#     # O(n) //time consuming
-#     for handle in handles:
-#         row = req(f'contest.standings?contestId={cId}&handles={handle}', False)
-
-#         try:
-#             data = {
-#                 'handle': handle,
-#                 'contest': row['result']['contest']['name'],
-#                 'rank': row['result']['rows'][0]['rank'],
-#             }
-
-#             contestant.append(data)
-#         except:
-#             continue
-
-#      O(n) // time consuming
-#      for i in response['result']['rows']:
-#          row = i['party']
-#          handle = row['members'][0]['handle']
-#          user = getcfinfo(handle)
-#          try:
-#          	if user['organization'].find('RUET') != -1 or (user['organization'].find('Rajshahi') != -1 and user['organization'].find('Engineering') != -1):
-#          		contestant.append({
-#          			'handle': user['handle'],
-#          			'solved': len(row['problemResults']),
-#          			'global-rank': row['rank']
-#          			})
-#          except: continue
-
-#     return contestant
-
 
 # Index Page
 @app.route('/')
@@ -275,12 +210,19 @@ def index():
 
 @app.route('/performance', methods= ['GET',  'POST'])
 def performance():
+    # print(request.args.get('contestid'))
+    if request.args.get('contestid') and request.args.get('weight'):
+        from analyzer import generateContestPerformanceCombined
+        res = list(map(int,request.args.get('contestid').strip().split()))
+        reswt = list(map(int,request.args.get('weight').strip().split()))
 
-    if request.args.get('contestid'):
-        from analyzer import generateContestPerformance
-        res = generateContestPerformance(request.args.get('contestid'))
+        # print(res, reswt)
 
-        return jsonify(res)
+        fres = generateContestPerformanceCombined(res,reswt)
+
+        # print(fres)
+
+        return jsonify(fres)
 
     auth= Auth()
 
@@ -403,11 +345,14 @@ def logout():
     except:
     	return "Wrong"
 
+@app.route('/profile/<username>')
+def profile(username):
+    print(username)
+    auth = getProfileData(username)
+    gen = getcfinfo(auth['ojinfo']['codeforces'])
+    color = gen['maxRank']
 
-# @app.route('/profile', methods=['GET'])
-# def profile():
-#     username = request.args.get('name')
-#     return jsonify(scrape(username))
+    return render_template('profile.html', auth=auth, user=auth['ojinfo']['codeforces'], info=gen, color=cfcolor[color])
 
 
 if __name__ == '__main__':

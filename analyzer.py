@@ -173,7 +173,6 @@ def req(api_method, renew=False):
         return json.loads(response.text)
 
 def generateContestPerformance(contestId):
-
     con = mysql.connect()
     cursor = con.cursor()
     cursor.execute('SELECT id,handle_cf FROM ojinfo')
@@ -282,11 +281,53 @@ def generateContestPerformance(contestId):
     finalres = sorted(finalres, key = lambda i: (i['capability'], -i['time']),reverse = True)
 
     # print(finalres)
-
-    return finalres
     
 
-# generateContestPerformance(1303)
+    return finalres
+
+def generateContestPerformanceCombined(contest, weight):
+    data = {}
+    sz = len(contest)
+
+    sum=0
+
+    for i in range(sz):
+        getOne = generateContestPerformance(contest[i]) # id, capability, time
+        sum+=weight[i]
+        for j in getOne:
+            if j['id'] in data:
+                data[j['id']]['capability']+= j['capability']*weight[i]
+                data[j['id']]['time']+= j['time']*weight[i]
+
+            else:
+                tmp = {
+                    j['id'] : {
+                        'id' : j['id'],
+                        'capability' : j['capability']*weight[i],
+                        'time' : j['time']*weight[i]
+                    }
+                }
+
+                data.update(tmp)
+
+    # print(sum)
+
+    for i in data:
+        data[i]['capability']=round(data[i]['capability']/sum,2)
+        data[i]['time']=round(data[i]['time']/sum, 2)
+    
+    # print(data)
+
+    ret = []
+
+    for i in data:
+        ret.append(data[i])
+
+    ret = sorted(ret, key = lambda i: (i['capability'], -i['time']),reverse = True)
+    
+    return ret
+
+# generateContestPerformanceCombined([1303,1295],[50,32])
 # generateFavorite([356330],[1303])
 # generateFavorite([],[1303])
 

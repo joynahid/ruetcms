@@ -1,6 +1,4 @@
-RUETCMS
-========
-AKA RUET Contest Management System
+RUET Contest Management System
 ------------------------------------
 A Contest Management System for competitive programmers. It will help a community to track all the programmers and their performance. A user can also track his ups and downs using various analytics.
 

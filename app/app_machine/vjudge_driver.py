@@ -23,59 +23,62 @@ webdriver = webdriver.Chrome(
 )
 
 def insert(contest_id, db):
-    wait = WebDriverWait(webdriver, 10)
+    try:
+        wait = WebDriverWait(webdriver, 10)
 
-    contest_id = str(contest_id)
-    selfid = ''
-    for i in contest_id:
-        if i.isdigit():
-            selfid+=i
+        contest_id = str(contest_id)
+        selfid = ''
+        for i in contest_id:
+            if i.isdigit():
+                selfid+=i
 
-    selfid = int(selfid)
-    uri = 'https://vjudge.net/contest/{}#rank'.format(selfid)
+        selfid = int(selfid)
+        uri = 'https://vjudge.net/contest/{}#rank'.format(selfid)
 
-    webdriver.get(uri)
+        webdriver.get(uri)
 
-    source = webdriver.page_source
-    
-    soup = BeautifulSoup(source, 'html.parser')
-
-    webdriver.close()
-
-    title = soup.select('title')[0].text
-    author = soup.select('#contest-manager > a')[0].text
-    query = '#contest-rank-table > thead:nth-child(2) > tr:nth-child(1) > th'
-    numOfProblems = len(soup.select(query)) - 4
-
-    fetchRank = soup.find_all("td", class_=["meta"])
-    ranks = []
-
-    for i in range(0,len(fetchRank),4):
-        p = []
+        source = webdriver.page_source
         
-        for j in range(4):
-            p.append(fetchRank[i].text)
-            i+=1
+        soup = BeautifulSoup(source, 'html.parser')
 
-        # print(p)
+        webdriver.close()
 
-        data = {
-            'serial' : int(p[0]),
-            'vj' : p[1].split(' ')[0],
-            'solved' : int(p[2]),
-            'penalty' : int(p[3].split(' ')[1].strip())
+        title = soup.select('title')[0].text
+        author = soup.select('#contest-manager > a')[0].text
+        query = '#contest-rank-table > thead:nth-child(2) > tr:nth-child(1) > th'
+        numOfProblems = len(soup.select(query)) - 4
+
+        fetchRank = soup.find_all("td", class_=["meta"])
+        ranks = []
+
+        for i in range(0,len(fetchRank),4):
+            p = []
+            
+            for j in range(4):
+                p.append(fetchRank[i].text)
+                i+=1
+
+            # print(p)
+
+            data = {
+                'serial' : int(p[0]),
+                'vj' : p[1].split(' ')[0],
+                'solved' : int(p[2]),
+                'penalty' : int(p[3].split(' ')[1].strip())
+            }
+
+            ranks.append(data)
+        
+        ret = {
+            'title' : title,
+            'author' : author,
+            'numOfProblems': numOfProblems,
+            'ranks' : ranks
         }
 
-        ranks.append(data)
-    
-    ret = {
-        'title' : title,
-        'author' : author,
-        'numOfProblems': numOfProblems,
-        'ranks' : ranks
-    }
-
-    db.collection('vjudgeContests').document(str(selfid)).set(ret)
+        db.collection('vjudgeContests').document(str(selfid)).set(ret)
+    except Exception as e:
+        print(e.message)
 
 # insert(376797,4)
 

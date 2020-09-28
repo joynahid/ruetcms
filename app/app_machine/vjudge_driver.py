@@ -9,7 +9,7 @@ from selenium.webdriver.support.expected_conditions import presence_of_element_l
 from bs4 import BeautifulSoup
 
 chrome_driver_path = os.environ['CHROME_DRIVER_PATH']
-chrome_bin_path = os.environ['CHROME_BIN']
+chrome_bin_path = os.environ['GOOGLE_CHROME_BIN']
 
 chrome_options = Options()
 chrome_options.add_argument('--headless')

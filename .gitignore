@@ -3,3 +3,4 @@ Pipfile.lock
 ./ruetcms
 analyzer.py
 .env
+chromedriver.exe

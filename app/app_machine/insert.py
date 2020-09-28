@@ -2,10 +2,10 @@ from datetime import datetime
 from requests_html import HTMLSession
 import firebase_admin
 from firebase_admin import credentials, firestore, initialize_app, auth
-import sys
+import sys, os
 
 session = HTMLSession()
-cred = credentials.Certificate("./firebasedb/serviceAccountKey.json")
+cred = credentials.Certificate(os.environ['SERVICE_CREDENTIALS'])
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
@@ -19,6 +19,8 @@ def insertVjInfo(id):
     selfid = int(selfid)
     uri = f'https://vjudge.net/contest/{selfid}#rank'
     selfdoc = session.get(uri)
+
+    print('Requesting to', uri)
 
     selfdoc.html.render()
 

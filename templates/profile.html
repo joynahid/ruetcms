@@ -1,0 +1,168 @@
+{% extends 'defaults/authlayout.html' %}
+{% block title %} Profile of {{user['name']}} {%endblock%}
+
+{% block fullcontent %}
+
+<div class="row">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        <i class="fas fa-info-circle"></i> {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="col-sm-4">
+        <!-- Codeforces Profile Plugin -->
+        <div class="card rounded shadow-sm mb-3" style="margin: auto; text-align: center;">
+            <img id='title_photo' width="100%" />
+            <div class="card-body">
+                <p style="font-size: 18px;"> <b>{{user['name']}}</b></p>
+                <hr>
+                <p class="p-0 m-0" style="font-weight: bold;"><small>
+                        <span id="max_rank" style="text-transform: uppercase; font-weight: bold; font-size: 12"></span>
+                    </small>
+                </p>
+                <p id='max_rating'></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-8">
+        <div>
+            <div class="display-4 pb-4">
+                Basic Information
+                <hr>
+            </div>
+
+            <div class="display-4" style="font-size: 1.5em;">
+                Name
+            </div>
+            <div class="display-4 pb-4" style="font-size: 2em;">
+                <b>{{user['name']}}</b>
+            </div>
+
+            <div class="display-4" style="font-size: 1.5em;">
+                Codeforces
+            </div>
+            <div class="display-4 pb-4" style="font-size: 2em;">
+                <b><a href="https://codeforces.com/profile/{{user['cf']}}"
+                        target="_blank">{{user['cf']}}</a></b>
+            </div>
+
+            <div class="display-4" style="font-size: 1.5em;">
+                Institute
+            </div>
+            <div class="display-4 pb-4" style="font-size: 2em;">
+                <b id='organization'></b>
+            </div>
+
+        </div>
+
+        <canvas id="myChart" width="400"></canvas>
+    </div>
+</div>
+
+{% endblock %}
+
+{%block script%}
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Loads Codeforces Profile Plugin Data
+        let uri = 'https://codeforces.com/api/user.info?handles='
+        let cf_username = '{{ user['cf'] }}'
+
+        uri+=cf_username+'&lang=en'
+
+        // console.log(uri)
+
+        $.getJSON(uri, function(data, status){
+            data = data['result'][0]
+            // console.log(data)
+            $('#title_photo').attr('src',data['titlePhoto']);
+            $('#max_rank').html(data['maxRank'])
+            $('#max_rating').html(data['maxRating'])
+            $('#organization').html(data['organization'])
+        });
+
+        // Loads the Chart
+        $.ajax({
+            type: "GET",
+            url: uri,
+            data: '',
+            success: function (data) {
+                var cnt = 1;
+
+                var lbls = [];
+                var dd = [];
+                var bgcolor = [];
+
+                function getRandomColor() {
+                    var letters = 'ABCDEF0123456789';
+                    var color = '#';
+                    for (var i = 0; i < 6; i++) {
+                        color += letters[Math.floor(Math.random() * 16)];
+                    }
+                    return color;
+                }
+
+                $.each(data.result, function (key, element) {
+                    lbls.push(element.newRating);
+                    dd.push(cnt++);
+                    bgcolor.push(getRandomColor());
+
+
+                    var ctx = document.getElementById('myChart').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: dd,
+                            datasets: [{
+                                backgroundColor: "transparent",
+                                label: 'Rating',
+                                data: lbls,
+                                fill: false,
+                                borderColor: ['{{color}}'],
+                                pointBackgroundColor: bgcolor,
+                                borderWidth: 3,
+                                pointRadius: 2
+                            }]
+                        },
+                        options: {
+                            tooltips: { enabled: false },
+                            hover: { mode: null },
+                            title: {
+                                display: true,
+                                text: 'Rating Curve'
+                            },
+                            legend: {
+                                display: false
+                            },
+                            scales: {
+                                xAxes: [{
+                                    gridLines: {
+                                        display: true
+                                    }
+                                }],
+                                yAxes: [{
+                                    gridLines: {
+                                        display: true
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                });
+            },
+            error: function (xmlHttpRequest, textStatus, errorThrown) {
+                alert(errorThrown);
+            }
+        });
+    });
+</script>
+{%endblock%}

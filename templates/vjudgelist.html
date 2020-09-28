@@ -1,0 +1,86 @@
+{% extends 'defaults/authlayout.html' %}
+{% block title %} Generated Ranklist {%endblock%}
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+    <i class="fas fa-info-circle"></i> {{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<div class="card bg-white rounded shadow-sm table-bordered">
+    <div class="card-body p-5">
+        <h5 class="card-title">
+            <div class="d-flex">
+                <div class="mr-auto">Vjudge Contests</div>
+            </div>
+        </h5>
+
+        <table style="display: none;" class="table table-responsive">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Author</th>
+                    <th scope="col">Problems</th>
+                    <th scope="col">Winner</th>
+                </tr>
+            </thead>
+            <tbody id='trow'>
+            </tbody>
+        </table>
+
+        <div id="retrieve" style="padding: 10; display: none;"><center><i class="fas fa-circle-notch fa-spin"></i> Retrieving Data</center></div>
+
+        <!-- <div class="mt-5">
+            <a href="#" id="triggerData" class="card-link"><i class="fas fa-file-pdf pr-2"></i> Get PDF</a>
+        </div>
+        <hr> -->
+
+        <div class="mt-2">
+            <a href="{{request.referrer}}" class="card-link"><i class="fas fa-arrow-left pr-2"></i> Back</a>
+        </div>
+    </div>
+</div>
+</div>
+{%endblock%}
+{%block script%}
+<script type="text/javascript">
+
+$('#retrieve').show(0)
+$.getJSON('/vj/listdata', function(dat){
+
+    $('.col-sm-3').remove()
+    $('.col-sm-9').attr('class','col')
+
+    let i=1
+    $.each(dat, function(key, data){
+        console.log('Here', data)
+        let id = '<td>'+ i++ +'</td>'
+        let title = '<td><a href="https:/vjudge.net/contest/' +data['id'] + '">'+ data['title'] +'</a></td>'
+        let author = '<td>'+ data['author'] +'</td>'
+        let numOfProblems = '<td>'+ data['numOfProblems'] +'</td>'
+        let winner = '<td>'+ data['ranks']['0']['vj'] +'</td>'
+
+        trow = '<tr>' + id + title + author + numOfProblems + winner + '</tr>'
+
+        $('#trow').append(trow)
+    })
+    $('#retrieve').hide(0)
+    $('.table').show('slow')
+})
+
+
+
+$(document).ready(function() {
+    $("#triggerData").click(function() {
+        $("#dataForm").submit();
+    });
+});
+</script>
+{%endblock%}

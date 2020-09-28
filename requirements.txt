@@ -1,0 +1,7 @@
+flask
+requests
+flask-session
+firebase-admin
+requests-html
+gunicorn
+beautifulsoup4

@@ -1,0 +1,105 @@
+{% extends 'defaults/authlayout.html' %}
+{% block title %} RUETCMS {%endblock%}
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+    <i class="fas fa-info-circle"></i> {{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+    <div class="row">
+        <div class="col">
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner shadow-sm">
+                    <div class="card border-0">
+                        <div class="card-body">
+                        <h6>RAPL Contest Info</h6>
+                        {%for contest in vjContest%}
+                            <div class="carousel-item">
+                                    <h5 class="card-title"><a target="__blank" href="https://vjudge.net/contest/{{contest['id']}}">{{contest['title']}}</a></h5>
+                                    <p class="card-text">This contest was authored by <a target="__blank" href="https://vjudge.net/user/{{contest['author']}}">{{contest['author']}}</a> with {{contest['numOfProblems']}} problems and won by <a target="__blank" href="https://vjudge.net/user/{{contest['top']}}">{{contest['top']}}</a></p>
+                                </div>
+                        {%endfor%}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id='caro_next' style="cursor: pointer; padding: 10px; display: flex; flex-direction: row-reverse; color: dodgerblue;"><span>Next <i class="fas fa-arrow-right"></i></span></div>
+        </div>
+  </div>
+
+<br>
+
+<div class="card mb-3">
+    <div class="card-header bg-dark text-white">
+        What can I do?
+    </div>
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><img src="/static/res/profile.svg" width="30px" class="pr-2" /><a href="{{url_for('manager')}}">Manager Mode</a> <span
+                    class="badge badge-primary badge-pill">new</span></li>
+            <li class="list-group-item"><img src="/static/res/performance.svg" width="30px" class="pr-2" /><a href="{{url_for('performance')}}">Codeforces Performance Checker</a></li>
+            <li class="list-group-item"><img src="/static/res/manager.svg" width="30px" class="pr-2" /><a href="{{url_for('vjudgeList')}}">VJudge Contest List</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+{%block sidebar%}
+
+<div class="card border-0 mb-3">
+    <div class="card-body shadow-sm">
+    <h5 class="card-title">Leader Board</h5>
+    <p class="card-text">Nothing to show currently</p>
+    </div>
+</div>
+
+<!-- Codeforces Profile Plugin -->
+<div class="card rounded shadow-sm" style="margin: auto; text-align: center;">
+    <img id='title_photo' width="100%" />
+    <div class="card-body">
+        <p style="font-size: 18px;"> <b>{{user['name']}}</b></p>
+        <hr>
+        <p class="p-0 m-0" style="font-weight: bold;"><small>
+                <span id="max_rank" style="text-transform: uppercase; font-weight: bold; font-size: 12"></span>
+            </small>
+        </p>
+        <p id='max_rating'></p>
+    </div>
+</div>
+
+{%endblock%}
+{%block script%}
+<script type="text/javascript">
+    $('.carousel-item').first().addClass('active')
+
+    $('#caro_next').click(function(){
+        $('#carouselExampleControls').carousel('next')
+    })
+
+    let uri = 'https://codeforces.com/api/user.info?handles='
+    let cf_username = '{{ user['cf'] }}'
+
+    uri+=cf_username+'&lang=en'
+
+    console.log(uri)
+
+    $.getJSON(uri, function(data, status){
+        data = data['result'][0]
+        console.log(data)
+        $('#title_photo').attr('src',data['titlePhoto']);
+        $('#max_rank').html(data['maxRank'])
+        $('#max_rating').html(data['maxRating'])
+    });
+
+    // $(document).ready(function(){
+
+    // });
+</script>
+{%endblock%}

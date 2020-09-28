@@ -1,10 +1,7 @@
 {% extends 'defaults/authlayout.html' %}
 {% block title %} Manager Mode | RUETCMS {%endblock%}
 {% block content %}
-<div class="card bg-white shadow-sm mb-4">
-    <div class="card-header bg-dark text-white">
-        Manager
-    </div>
+<div class="card bg-white shadow-cs mb-4">
     <div class="p-4">
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -25,7 +22,7 @@
                     <div class="form-group">
 
                         <div class="card border-0 shadow-sm mb-4" style="border-radius: 15px; margin-bottom: 4px;">
-                            <div class="card-body">
+                            <div class="card-body p-0">
                                 <div class="card-header" style="background-color: transparent;">Rules to Insert
                                 </div>
                                 <ul class=" list-group border-0">
@@ -54,7 +51,7 @@
             <div class="card-body">
                 <h5 class="card-title">Ranklist Generator</h5>
                 <div class="card border-0 shadow-sm mb-4" style="border-radius: 15px; margin-bottom: 4px;">
-                    <div class="card-body">
+                    <div class="card-body p-0">
                         <div class="card-header" style="background-color: transparent;">Analysing Parameters</div>
                         <ul class=" list-group border-0">
                             <li class="list-group-item border-0" style="background-color: transparent;">
@@ -92,7 +89,7 @@
                         <label for="listcf">Codeforces Contest IDs (Space Separated)</label>
                         <input type="text" class="form-control" name="listcf" id="listcf" placeholder="8347 7553">
                     </div>
-                    <button type="submit" class="btn btn-success mb-2" id="sub"><span>Generate</span></button> <span
+                    <button type="submit" class="btn btn-primary mb-2" id="sub"><span>Generate</span></button> <span
                         id="loading" style="visibility: hidden; padding-left: 5px"><span class="pl-2"><i
                                 class="fas fa-circle-notch fa-spin fa-lg"></i></span></span>
                 </form>

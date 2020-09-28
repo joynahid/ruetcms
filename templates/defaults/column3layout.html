@@ -72,7 +72,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link rounded" href="{{ url_for('app_auth.register') }}"><i class="fas fa-user-plus"></i> Register</a>
+                        <a class="nav-link rounded" href="{{ url_for('app_auth.register') }}">Register</a>
                     </li>
 
                     {% endif %}
@@ -85,11 +85,14 @@
         <div class="container">
             {%block fullcontent%}{%endblock%}
             <div class="row">
-                <div class="col-sm-9">
-                    {%block content%}{%endblock%}
+                <div class="col-sm-5">
+                    {%block bigcolumn%}{%endblock%}
+                </div>
+                <div class="col-sm-4">
+                    {%block midcolumn%}{%endblock%}
                 </div>
                 <div class="col-sm-3">
-                    {%block sidebar%}{%endblock%}
+                    {%block smallcolumn%}{%endblock%}
                 </div>
             </div>
         </div>

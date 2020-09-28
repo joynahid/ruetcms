@@ -1,0 +1,30 @@
+{% if user is not defined %}
+<div class="card mb-3 p-4 shadow-cs border-0">
+    <form class="form-signin" action="{{ url_for('app_auth.login')}} " method="post" id='log'>
+        <div class="form-label-group mb-2">
+            <label for="inputEmail">Username</label>
+            <input name="username" type="text" id="inputEmail" class="form-control" placeholder="Username" required>
+        </div>
+
+        <div class="form-label-group">
+            <label for="inputPassword">Password</label>
+            <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password"
+                required>
+        </div>
+        <!---
+                            <div class="custom-control custom-checkbox mb-3">
+                            <input type="checkbox" class="custom-control-input" id="customCheck1">
+                            <label class="custom-control-label" for="customCheck1">Remember password</label>
+                            </div>
+                            -->
+        <button class="btn btn-success text-uppercase mb-4 mt-2" style="font-size: 16px;" type="submit" id='sign'>Sign
+            in</button>
+        <div class="ml-2">
+            <small>Don't have a account?</small>
+        </div>
+        <a href="{{url_for('app_auth.register')}}"><button class="btn text-uppercase" style="font-size: 16px"
+                type="button">Register HERE</button>
+        </a>
+    </form>
+</div>
+{% endif %}

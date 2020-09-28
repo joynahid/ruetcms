@@ -145,4 +145,4 @@ def vjudgeList():
     return render_template('vjudgelist.html')
 
 if __name__ == '__main__':
-    app.run(host='192.168.43.88')
+    app.run()

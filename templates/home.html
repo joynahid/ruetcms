@@ -16,10 +16,11 @@
     <div class="row">
         <div class="col">
             <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner shadow-sm">
-                    <div class="card border-0">
+                <div class="carousel-inner shadow-cs">
+                    <div class="card border-0 shadow-cs">
                         <div class="card-body">
-                        <h6>RAPL Contest Info</h6>
+                        <h6><span id="caro_left" style="color: gray; cursor: pointer;"><i class="fas fa-arrow-left pr-2"></i></span> <span style="color: gray; cursor: pointer;" id="caro_next"><i class="fas fa-arrow-right pr-2"></i></span> RAPL Contest Info</h6>
+                        <hr>
                         {%for contest in vjContest%}
                             <div class="carousel-item">
                                     <h5 class="card-title"><a target="__blank" href="https://vjudge.net/contest/{{contest['id']}}">{{contest['title']}}</a></h5>
@@ -30,31 +31,26 @@
                     </div>
                 </div>
             </div>
-
-            <div id='caro_next' style="cursor: pointer; padding: 10px; display: flex; flex-direction: row-reverse; color: dodgerblue;"><span>Next <i class="fas fa-arrow-right"></i></span></div>
         </div>
   </div>
-
 <br>
 
-<div class="card mb-3">
-    <div class="card-header bg-dark text-white">
-        What can I do?
-    </div>
+<div class="card mb-3 shadow-cs">
     <div class="card-body">
         <ul class="list-group list-group-flush">
-            <li class="list-group-item"><img src="/static/res/profile.svg" width="30px" class="pr-2" /><a href="{{url_for('manager')}}">Manager Mode</a> <span
-                    class="badge badge-primary badge-pill">new</span></li>
-            <li class="list-group-item"><img src="/static/res/performance.svg" width="30px" class="pr-2" /><a href="{{url_for('performance')}}">Codeforces Performance Checker</a></li>
-            <li class="list-group-item"><img src="/static/res/manager.svg" width="30px" class="pr-2" /><a href="{{url_for('vjudgeList')}}">VJudge Contest List</a></li>
+            <li class="list-group-item border-0"><img src="/static/res/profile.svg" width="30px" class="pr-2" /><a href="{{url_for('manager')}}">Analyse Contests</a></li>
+            <li class="list-group-item border-0"><img src="/static/res/performance.svg" width="30px" class="pr-2" /><a href="{{url_for('performance')}}">Codeforces Performance</a></li>
+            <li class="list-group-item border-0"><img src="/static/res/manager.svg" width="30px" class="pr-2" /><a href="{{url_for('vjudgeList')}}">Internal Contest History</a></li>
         </ul>
     </div>
 </div>
 {% endblock %}
 {%block sidebar%}
 
+{% include './plugins/minilogin.html' %}
+
 <div class="card border-0 mb-3">
-    <div class="card-body shadow-sm">
+    <div class="card-body">
     <h5 class="card-title">Leader Board</h5>
     <p class="card-text">Nothing to show currently</p>
     </div>
@@ -70,6 +66,11 @@
     $('#caro_next').click(function(){
         $('#carouselExampleControls').carousel('next')
     })
+
+    $('#caro_left').click(function(){
+        $('#carouselExampleControls').carousel('prev')
+    })
+    
     {% if user is defined %}
 
         let uri = 'https://codeforces.com/api/user.info?handles='

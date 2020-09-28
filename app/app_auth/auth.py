@@ -1,14 +1,15 @@
 from flask import *
 import datetime, json, time, requests
 from firebase_admin import firestore, credentials, auth, initialize_app
+import os
 
 app_auth = Blueprint('app_auth', __name__, template_folder='templates', static_folder='/static')
 
-cred = credentials.Certificate("./firebasedb/serviceAccountKey.json")
+cred = credentials.Certificate(os.environ['SERVICE_CREDENTIALS'])
 initialize_app(cred)
 db = firestore.client()
 
-API_KEY = "AIzaSyCLnZrQjGgMsPM9WIIpQ_1coQ0WjlbKXds"
+API_KEY = os.environ['API_KEY']
 
 def Authenticate():
     print("Authenticating...")

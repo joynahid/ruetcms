@@ -1,5 +1,5 @@
 {% extends 'defaults/authlayout.html' %}
-{% block title %} Profile of {{user['name']}} {%endblock%}
+{% block title %} Profile of {{profile['name']}} {%endblock%}
 
 {% block fullcontent %}
 
@@ -22,7 +22,7 @@
         <div class="card rounded shadow-sm mb-3" style="margin: auto; text-align: center;">
             <img id='title_photo' width="100%" />
             <div class="card-body">
-                <p style="font-size: 18px;"> <b>{{user['name']}}</b></p>
+                <p style="font-size: 18px;"> <b>{{profile['name']}}</b></p>
                 <hr>
                 <p class="p-0 m-0" style="font-weight: bold;"><small>
                         <span id="max_rank" style="text-transform: uppercase; font-weight: bold; font-size: 12"></span>
@@ -44,15 +44,15 @@
                 Name
             </div>
             <div class="display-4 pb-4" style="font-size: 2em;">
-                <b>{{user['name']}}</b>
+                <b>{{profile['name']}}</b>
             </div>
 
             <div class="display-4" style="font-size: 1.5em;">
                 Codeforces
             </div>
             <div class="display-4 pb-4" style="font-size: 2em;">
-                <b><a href="https://codeforces.com/profile/{{user['cf']}}"
-                        target="_blank">{{user['cf']}}</a></b>
+                <b><a href="https://codeforces.com/profile/{{profile['cf']}}"
+                        target="_blank">{{profile['cf']}}</a></b>
             </div>
 
             <div class="display-4" style="font-size: 1.5em;">
@@ -75,7 +75,7 @@
     $(document).ready(function () {
         // Loads Codeforces Profile Plugin Data
         let uri = 'https://codeforces.com/api/user.info?handles='
-        let cf_username = '{{ user['cf'] }}'
+        let cf_username = '{{ profile['cf'] }}'
 
         uri+=cf_username+'&lang=en'
 

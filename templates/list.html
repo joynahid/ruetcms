@@ -22,7 +22,7 @@
                 <div class="p-2 text-primary"><small><i class="fas fa-square"></i> VJ</small></div>
             </div>
         </h5>
-        <table class="table shadow-sm table-bordered table-responsive">
+        <table class="table border-0 table-bordered table-responsive w-100 d-block d-md-table" width='100%'>
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">#</th>
@@ -68,8 +68,12 @@
 {%block script%}
 <script type="text/javascript">
 
-$('.col-sm-3').remove()
-$('.col-sm-9').attr('class','col')
+{% if user %}
+
+    $('.col-sm-3').remove()
+    $('.col-sm-9').attr('class','col')
+
+{% endif %}
 
 $(document).ready(function() {
     $("#triggerData").click(function() {

@@ -1,0 +1,15 @@
+{% if user is defined %}
+    <!-- Codeforces Profile Plugin. It has jQuery dependencies -->
+    <div class="card rounded shadow-sm" style="margin: auto; text-align: center;">
+        <img id='title_photo' width="100%" />
+        <div class="card-body">
+            <p style="font-size: 18px;"> <b>{{user['name']}}</b></p>
+            <hr>
+            <p class="p-0 m-0" style="font-weight: bold;"><small>
+                    <span id="max_rank" style="text-transform: uppercase; font-weight: bold; font-size: 12"></span>
+                </small>
+            </p>
+            <p id='max_rating'></p>
+        </div>
+    </div>
+{% endif %}

@@ -43,6 +43,8 @@ def insert(contest_id, db):
 
         webdriver.close()
 
+        print('Closed')
+
         title = soup.select('title')[0].text
         author = soup.select('#contest-manager > a')[0].text
         query = '#contest-rank-table > thead:nth-child(2) > tr:nth-child(1) > th'
@@ -78,6 +80,7 @@ def insert(contest_id, db):
 
         db.collection('vjudgeContests').document(str(selfid)).set(ret)
     except Exception as e:
+        webdriver.close()
         print(e.message)
 
 # insert(376797,4)

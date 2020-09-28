@@ -19,7 +19,6 @@
             Performance Checker (Codeforces Only)
         </h5>
 
-
         <form id='contestids'>
             <div class="form-group">
                 <label for="cfid" class="col-form-label">Contest Number</label>
@@ -37,7 +36,7 @@
 
         <div id="title" style="hidden" class="pb-2 pt-2"></div>
 
-        <table class="table shadow-sm table-bordered" id="mainlist">
+        <table class="table shadow-sm table-bordered w-100 d-block d-md-table table-responsive" id="mainlist">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">#</th>
@@ -121,7 +120,6 @@
                         }
                         return color;
                     }
-
 
                     $.each(data, function (key, element) {
                         var htm = "<tr><td>" + cnt + "</td><td>" + element.id + "</td> <td>" + element.capability + "%</td><td>" + element.time + " minutes</td></tr>";

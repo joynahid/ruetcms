@@ -60,19 +60,7 @@
     </div>
 </div>
 
-<!-- Codeforces Profile Plugin -->
-<div class="card rounded shadow-sm" style="margin: auto; text-align: center;">
-    <img id='title_photo' width="100%" />
-    <div class="card-body">
-        <p style="font-size: 18px;"> <b>{{user['name']}}</b></p>
-        <hr>
-        <p class="p-0 m-0" style="font-weight: bold;"><small>
-                <span id="max_rank" style="text-transform: uppercase; font-weight: bold; font-size: 12"></span>
-            </small>
-        </p>
-        <p id='max_rating'></p>
-    </div>
-</div>
+{% include './plugins/cfprofile.html' %}
 
 {%endblock%}
 {%block script%}
@@ -82,24 +70,29 @@
     $('#caro_next').click(function(){
         $('#carouselExampleControls').carousel('next')
     })
+    {% if user is defined %}
 
-    let uri = 'https://codeforces.com/api/user.info?handles='
-    let cf_username = '{{ user['cf'] }}'
+        let uri = 'https://codeforces.com/api/user.info?handles='
+        let cf_username = '{{ user['cf'] }}'
 
-    uri+=cf_username+'&lang=en'
+        uri+=cf_username+'&lang=en'
 
-    console.log(uri)
+        console.log(uri)
 
-    $.getJSON(uri, function(data, status){
-        data = data['result'][0]
-        console.log(data)
-        $('#title_photo').attr('src',data['titlePhoto']);
-        $('#max_rank').html(data['maxRank'])
-        $('#max_rating').html(data['maxRating'])
-    });
+        $.getJSON(uri, function(data, status){
+            data = data['result'][0]
+            console.log(data)
+            $('#title_photo').attr('src',data['titlePhoto']);
+            $('#max_rank').html(data['maxRank'])
+            $('#max_rating').html(data['maxRating'])
+        });
 
-    // $(document).ready(function(){
+        $('#log').submit(function() {
+                $('#sign').html('<i class="fas fa-circle-notch fa-spin fa-lg"></i>')
+                $('#sign').prop('disabled', true);
+            });
 
-    // });
+    {% endif %}
+
 </script>
 {%endblock%}

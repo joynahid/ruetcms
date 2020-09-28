@@ -18,7 +18,7 @@ def index():
     if Authenticate():
         return render_template('home.html', vjContest = vjudge_driver.vjInfoQuery(db), user=session['userHandle'])
 
-    return redirect(url_for('app_auth.login'))
+    return render_template('home.html', vjContest = vjudge_driver.vjInfoQuery(db))
 
 def req(api_method):
     response = requests.get(f'https://codeforces.com/api/{api_method}')
@@ -56,23 +56,28 @@ def generate_ranklist():
 # Manager Page
 @app.route('/manager', methods=['GET', 'POST'])
 def manager():
-    if not Authenticate():
-        flash('You must login first', 'warning')
-        return redirect(url_for('app_auth.login', next = url_for('manager')))
+    if Authenticate():
+        return render_template('manager.html', user= session['userHandle'])
 
-    if request.method == 'GET':
-        if request.args.get('cids'):
-            cids = request.args.get('cids')
-            cids = cids.split(' ')
+    if request.method == 'GET' and request.args.get('cids'):
+        if not Authenticate():
+            flash('You must login first', 'warning')
+            return redirect(url_for('app_auth.login', next = url_for('manager')))
 
-            for id in cids:
-                if id:
-                    vjudge_driver.insert(id, db)
-                    # subprocess.run(f'python ./app/app_machine/insert.py insertVjInfo {id}', shell = True)
-            
-            flash('Successfully Inserted into Database. Thanks for your contribution','success')
+        cids = request.args.get('cids')
+        cids = cids.split(' ')
 
-    return render_template('manager.html', user = session['userHandle'])
+        ins_id = None
+        for id in cids:
+            if id:
+                ins_id = id
+                vjudge_driver.insert(id, db)
+                break
+        
+        flash(f'Successfully inserted {ins_id} into Database. +1 for your contribution was added','success')
+        return render_template('manager.html', user= session['userHandle'])
+
+    return render_template('manager.html')
 
 # 404 Page
 @app.errorhandler(404)
@@ -96,36 +101,37 @@ def performance():
         # print(fres)
 
         return jsonify(fres)
-
-    if not Authenticate():
-        flash('You must login first', 'warning')
-        return redirect(url_for('app_auth.login'))
     
-    return render_template('performance.html', user = session['userHandle'])
+    flash("This is not working. I'm working to fix it", 'danger')
+
+    if Authenticate(): return render_template('performance.html', user = session['userHandle'])
+    return render_template('performance.html')
 
 import datetime, time
 
 @app.route('/profile/<username>')
 def profile(username):
-    if 'userHandle' not in session:
-        session['userHandle'] = db.collection('profiles').document(username).get().to_dict()
-    return render_template('profile.html', user=session['userHandle'])
+    if Authenticate():
+        return render_template(
+            'profile.html',
+            profile = session['userHandle'] if session['userHandle']['username'] == username else db.collection('profiles').document(username).get().to_dict(),
+            user=session['userHandle']
+        )
+
+    return render_template('profile.html', profile=db.collection('profiles').document(username).get().to_dict())
 
 @app.route('/vj/listdata')
 def vjudgeContestListData():
-    if Authenticate():
-        docs = db.collection('vjudgeContests').stream()
+    docs = db.collection('vjudgeContests').stream()
 
-        data = []
+    data = []
 
-        for doc in docs:
-            jData = doc.to_dict()
-            jData.update({'id': doc.id})
-            data.append(jData)
-        
-        return jsonify(data)
+    for doc in docs:
+        jData = doc.to_dict()
+        jData.update({'id': doc.id})
+        data.append(jData)
     
-    return 'No Worries'
+    return jsonify(data)
 
 @app.route('/fame')
 def hallOfFame():
@@ -136,7 +142,7 @@ def vjudgeList():
     if Authenticate():
         return render_template('vjudgelist.html', user = session['userHandle'])
     
-    return redirect(url_for('app_auth.login'))
+    return render_template('vjudgelist.html')
 
 if __name__ == '__main__':
     app.run(host='192.168.43.88')

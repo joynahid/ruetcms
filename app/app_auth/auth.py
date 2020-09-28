@@ -15,25 +15,24 @@ def Authenticate():
     # print("Authenticating...")
     session_cookie = request.cookies.get('userSession')
 
-    if not session_cookie or 'robot' not in session or 'userHandle' not in session:
+    if not session_cookie or 'userHandle' not in session:
         # Session cookie is unavailable. Force user to login.
+        # print('Not Logged in')
         return False and redirect(url_for('app_auth.login'))
 
     try:
         # print('Checking Cookiee...')
         decoded_claims = auth.verify_session_cookie(session_cookie, check_revoked=True)
         return True
-    except auth.InvalidSessionCookieError as e:
+    except Exception as e:
         print(e)
         return False and redirect(url_for('app_auth.logout'))
-    except:
-        return 'Something went wrong! Sorry for the inconvenience'
 
 def session_login(id_token):
     try:
         decoded_claims = auth.verify_id_token(id_token)
 
-        session['robot'] = decoded_claims
+        # session['robot'] = decoded_claims
 
         if time.time() - decoded_claims['auth_time'] < 5 * 60:
             expires_in = datetime.timedelta(days=5)
@@ -160,10 +159,8 @@ def register():
 @app_auth.route('/auth/logout')
 def logout():
     # print('here')
-    session['robot'] = ''
     session['userHandle'] = ''
-    session['cfProfile']=''
-    flash(f'''Good Bye! See ya soon''','success')
-    response = make_response(redirect(url_for('app_auth.login')))
+    flash(f'''Good Bye! Have a great time.''','success')
+    response = make_response(redirect(url_for('index')))
     response.set_cookie('userSession', expires=0)
     return response

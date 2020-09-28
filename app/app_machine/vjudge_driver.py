@@ -35,6 +35,8 @@ def insert(contest_id, db):
         selfid = int(selfid)
         uri = 'https://vjudge.net/contest/{}#rank'.format(selfid)
 
+        print(uri)
+
         webdriver.get(uri)
 
         source = webdriver.page_source
@@ -78,10 +80,12 @@ def insert(contest_id, db):
             'ranks' : ranks
         }
 
+        print('success')
+
         db.collection('vjudgeContests').document(str(selfid)).set(ret)
     except Exception as e:
-        webdriver.close()
         print(e.message)
+        webdriver.close()
 
 # insert(376797,4)
 

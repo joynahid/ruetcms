@@ -5,3 +5,4 @@ firebase-admin
 requests-html
 gunicorn
 beautifulsoup4
+selenium

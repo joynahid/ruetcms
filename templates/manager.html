@@ -24,7 +24,8 @@
                 <form action="{{url_for('manager')}}" method="GET">
                     <div class="form-group">
                         <label for="filename">Contest IDs (Space Separated)</label>
-                        <input type="text" class="form-control" name="cids" id="filename" placeholder="376797 734837" required>
+                        <input type="text" class="form-control" name="cids" id="filename" placeholder="376797 734837"
+                            required>
                     </div>
                     <button type="submit" class="btn btn-primary mb-2">Upload</button>
                 </form>
@@ -34,22 +35,25 @@
             <div class="card-body">
                 <h5 class="card-title">Ranklist Generator</h5>
 
-                <div class="card border-0" style="border-radius: 15px; margin-bottom: 4px; background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);">
+                <div class="card border-0"
+                    style="border-radius: 15px; margin-bottom: 4px; background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);">
                     <div class="card-body">
                         <div class="card-header" style="background-color: transparent;>Analysing Parameters</div>
-                        <ul class="list-group border-0">
-                            <li class="list-group-item" style="background-color: transparent;">
+                        <ul class=" list-group border-0">
+                            <li class="list-group-item border-0" style="background-color: transparent;">
                                 Sum of number of solved problems in each contest
                             </li>
 
-                            <li class="list-group-item" style="background-color: transparent;">
+                            <li class="list-group-item border-0" style="background-color: transparent;">
                                 Sum of penalties of each contest
                             </li>
 
-                            <li class="list-group-item" style="background-color: transparent;">
-                                Ranklist wil show only registered contestants if he/she participated at least one given contests
+                            <li class="list-group-item border-0" style="background-color: transparent;">
+                                Ranklist wil show only registered contestants if he/she participated at least one given
+                                contests
                             </li>
-                        </ul>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
@@ -70,7 +74,9 @@
                         <label for="listcf">Codeforces Contest IDs (Space Separated)</label>
                         <input type="text" class="form-control" name="listcf" id="listcf" placeholder="8347 7553">
                     </div>
-                    <button type="submit" class="btn btn-success mb-2" id="sub"><span>Generate</span></button> <span id="loading" style="visibility: hidden; padding-left: 5px"><span class="pl-2"><i class="fas fa-circle-notch fa-spin fa-lg"></i></span></span>
+                    <button type="submit" class="btn btn-success mb-2" id="sub"><span>Generate</span></button> <span
+                        id="loading" style="visibility: hidden; padding-left: 5px"><span class="pl-2"><i
+                                class="fas fa-circle-notch fa-spin fa-lg"></i></span></span>
                 </form>
                 <div id="show" style="visibility: hidden;"><span></span></div>
             </div>
@@ -80,16 +86,19 @@
 {% endblock %}
 {%block script%}
 <script type="text/javascript">
-$("#listvj").focus(function() {
-    $("#recentvj").css("display", "block")
-});
-$(document).ready(function() {
-    $('#contest').submit(function() {
-        $('#loading').css('visibility', 'visible');
-        $("#sub").prop('disabled', true);
-        $("#sub").css({ 'background': 'black', 'color': 'white' });
-        $("#sub span").text('Working...');
+    $("#listvj").focus(function () {
+        $("#recentvj").css("display", "block")
     });
-});
+    $(document).ready(function () {
+        $('#contest').submit(function () {
+            $('#loading').css('visibility', 'visible');
+            $("#sub").prop('disabled', true);
+            $("#sub").css({
+                'background': 'black',
+                'color': 'white'
+            });
+            $("#sub span").text('Working...');
+        });
+    });
 </script>
 {%endblock%}

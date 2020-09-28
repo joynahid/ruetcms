@@ -2,7 +2,7 @@ from flask import *
 import requests, json, os, time
 from firebase_admin import firestore
 import firebase_admin
-from vjudgeInfoPlugin import vjInfoQuery
+from app.app_machine import vjudge_driver
 import subprocess
 from app.app_auth.auth import app_auth, db, Authenticate
 
@@ -18,17 +18,13 @@ app.register_blueprint(app_auth)
 @app.route('/')
 def index():
     if Authenticate():
-        return render_template('home.html', vjContest = vjInfoQuery(db), user=session['userHandle'])
+        return render_template('home.html', vjContest = vjudge_driver.vjInfoQuery(db), user=session['userHandle'])
 
     return redirect(url_for('app_auth.login'))
 
 def req(api_method):
     response = requests.get(f'https://codeforces.com/api/{api_method}')
     return jsonify(response.text)
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # Ranklist Generator (VJUDGE + CODEFORCES)
 @app.route('/generate_ranklist', methods=['GET','POST'])
@@ -73,10 +69,10 @@ def manager():
 
             for id in cids:
                 if id:
-                    print(id)
-                    subprocess.run(f'python ./app/app_machine/insert.py insertVjInfo {id}', shell = True)
+                    vjudge_driver.insert(id, db)
+                    # subprocess.run(f'python ./app/app_machine/insert.py insertVjInfo {id}', shell = True)
             
-            flash('Saved Vjudge Contest Information','success')
+            flash('Successfully Inserted into Database. Thanks for your contribution','success')
 
     return render_template('manager.html', user = session['userHandle'])
 

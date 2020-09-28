@@ -56,9 +56,6 @@ def generate_ranklist():
 # Manager Page
 @app.route('/manager', methods=['GET', 'POST'])
 def manager():
-    if Authenticate():
-        return render_template('manager.html', user= session['userHandle'])
-
     if request.method == 'GET' and request.args.get('cids'):
         if not Authenticate():
             flash('You must login first', 'warning')
@@ -77,6 +74,9 @@ def manager():
         flash(f'Successfully inserted {ins_id} into Database. +1 for your contribution was added','success')
         return render_template('manager.html', user= session['userHandle'])
 
+    if Authenticate():
+        return render_template('manager.html', user= session['userHandle'])
+        
     return render_template('manager.html')
 
 # 404 Page

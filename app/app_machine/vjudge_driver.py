@@ -11,6 +11,10 @@ from bs4 import BeautifulSoup
 chrome_driver_path = os.environ['CHROME_DRIVER_PATH']
 chrome_bin_path = os.environ['CHROME_BIN']
 
+print(os.environ['CHROME_DRIVER_PATH'])
+print(os.environ['CHROME_BIN'])
+
+
 chrome_options = Options()
 chrome_options.add_argument('--headless')
 chrome_options.add_argument('--no-sandbox')

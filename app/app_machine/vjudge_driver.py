@@ -11,9 +11,6 @@ from bs4 import BeautifulSoup
 chrome_driver_path = os.environ['CHROME_DRIVER_PATH']
 chrome_bin_path = os.environ['CHROME_BIN']
 
-print(os.environ['CHROME_DRIVER_PATH'])
-print(os.environ['GOOGLE_CHROME_BIN'])
-
 chrome_options = Options()
 chrome_options.add_argument('--headless')
 chrome_options.add_argument('--no-sandbox')
@@ -61,7 +58,7 @@ def insert(contest_id, db):
                 p.append(fetchRank[i].text)
                 i+=1
 
-            print(p)
+            # print(p)
 
             data = {
                 'serial' : int(p[0]),

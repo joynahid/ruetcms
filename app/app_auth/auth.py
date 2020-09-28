@@ -12,7 +12,7 @@ db = firestore.client()
 API_KEY = os.environ['API_KEY']
 
 def Authenticate():
-    print("Authenticating...")
+    # print("Authenticating...")
     session_cookie = request.cookies.get('userSession')
 
     if not session_cookie or 'robot' not in session or 'userHandle' not in session:
@@ -20,7 +20,7 @@ def Authenticate():
         return False and redirect(url_for('app_auth.login'))
 
     try:
-        print('Checking Cookiee...')
+        # print('Checking Cookiee...')
         decoded_claims = auth.verify_session_cookie(session_cookie, check_revoked=True)
         return True
     except auth.InvalidSessionCookieError as e:
@@ -102,7 +102,7 @@ def login():
         session['robot'] = reqResponse.json()
         session['userHandle'] = userInfo
 
-        print('user robot', session['userHandle'])
+        # print('user robot', session['userHandle'])
 
         return session_login(reqResponse.json()['idToken'])
 
@@ -159,7 +159,7 @@ def register():
 
 @app_auth.route('/auth/logout')
 def logout():
-    print('here')
+    # print('here')
     session['robot'] = ''
     session['userHandle'] = ''
     session['cfProfile']=''

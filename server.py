@@ -9,8 +9,6 @@ from app.app_auth.auth import app_auth, db, Authenticate
 app = Flask(__name__, template_folder='templates')
 app.config.from_pyfile('config.py')
 
-print(app.config['SECRET_KEY'])
-
 # Blueprints
 app.register_blueprint(app_auth)
 

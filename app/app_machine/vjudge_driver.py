@@ -11,7 +11,6 @@ from bs4 import BeautifulSoup
 chrome_driver_path = os.environ['CHROME_DRIVER_PATH']
 
 chrome_options = Options()
-chrome_options.binary_location = os.environ['CHROME_BIN']
 chrome_options.add_argument('--headless')
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-shm-usage')

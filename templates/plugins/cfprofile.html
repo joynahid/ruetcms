@@ -3,7 +3,7 @@
     <div class="card shadow-cs mb-4" style="margin: auto; text-align: center;">
         <img id='title_photo' width="100%" style="border-top-right-radius:15px ; border-top-left-radius: 15px;"/>
         <div class="card-body">
-            <p style="font-size: 18px;"><b>{{user['name'] if user is defined else profile['name']}}</b></p>
+            <p style="font-size: 18px;"><b>{{profile['name'] if profile is defined else user['name']}}</b></p>
             <hr>
             <p class="p-0 m-0" style="font-weight: bold;"><small>
                     <span id="max_rank" style="text-transform: uppercase; font-weight: bold; font-size: 12"></span>

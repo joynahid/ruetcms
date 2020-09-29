@@ -9,7 +9,8 @@
 
     <div class="container">
         <div class="card-columns">
-            <div class="card border-0 shadow-sm">
+            
+            <div class="card">
                 <!-- <img class="card-img-top" src="https://www.cse.ruet.ac.bd/public/storage/profile/photo447.jpg" width="200px" alt="Barshon Sen"> -->
                 <div class="card-body">
                     <h5 class="card-title">Barshon Sen</h5>
@@ -82,19 +83,11 @@
                     <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                 </div>
             </div>
+
         </div>
     </div>
 
-
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script>
-        let isLoading = 1
-
-        for (var i = 0; i < 100; i++) {
-            $('#loading').fadeIn(1000)
-            $('#loading').fadeOut(1500)
-        }
-    </script>
+    {% include './plugins/scripts.html' %}
 </body>
 
 </html>

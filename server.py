@@ -82,14 +82,14 @@ def manager():
 # 404 Page
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html')
+    return render_template('404.html', noauth = 1)
 
 @app.route('/performance', methods= ['GET',  'POST'])
 def performance():
     # print(request.args.get('contestid'))
     if request.args.get('contestid') and request.args.get('weight'):
 
-        from analyzer import generateContestPerformanceCombined
+        from app.app_analyzer.analyzer import generateContestPerformanceCombined
 
         res = list(map(int,request.args.get('contestid').strip().split()))
         reswt = list(map(int,request.args.get('weight').strip().split()))
@@ -102,7 +102,7 @@ def performance():
 
         return jsonify(fres)
     
-    flash("This is not working. I'm working to fix it", 'danger')
+    # flash("This is not working right now. I'm working to fix it", 'danger')
 
     if Authenticate(): return render_template('performance.html', user = session['userHandle'])
     return render_template('performance.html')
@@ -112,13 +112,21 @@ import datetime, time
 @app.route('/profile/<username>')
 def profile(username):
     if Authenticate():
-        return render_template(
-            'profile.html',
-            profile = session['userHandle'] if session['userHandle']['username'] == username else db.collection('profiles').document(username).get().to_dict(),
-            user=session['userHandle']
-        )
+        profile = None
 
-    return render_template('profile.html', profile=db.collection('profiles').document(username).get().to_dict())
+        if session['userHandle']['username'] == username: profile = session['userHandle']
+        else: profile  = db.collection('profiles').document(username).get().to_dict()
+
+        if not profile:
+            return redirect('/404')
+
+        return render_template('profile.html',user=session['userHandle'], profile = profile)
+
+    profile=db.collection('profiles').document(username).get().to_dict()
+    if not profile:
+            return redirect('/404')
+
+    return render_template('profile.html', profile=profile)
 
 @app.route('/vj/listdata')
 def vjudgeContestListData():
@@ -133,9 +141,9 @@ def vjudgeContestListData():
     
     return jsonify(data)
 
-@app.route('/fame')
+@app.route('/halloffame')
 def hallOfFame():
-    return render_template('halloffame.html')
+    return render_template('halloffame.html', noauth = 1)
 
 @app.route('/vj/list')
 def vjudgeList():

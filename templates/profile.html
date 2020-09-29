@@ -74,24 +74,7 @@
 </div>
 
 {% block script %}
-<script type="text/javascript">
-    // Loads Codeforces Profile Plugin Data
-    let uri = 'https://codeforces.com/api/user.info?handles='
-    let cf_username = "{{ profile['cf'] }}"
 
-    uri += cf_username + '&lang=en'
+{% include './scripts/cfprofile_script.html' %}
 
-    // console.log(uri)
-
-    $.getJSON(uri, function (data, status) {
-        data = data['result'][0]
-        // console.log(data)
-        $('#title_photo').attr('src', data['titlePhoto']);
-        $('#max_rank').html(data['maxRank'])
-        $('#max_rating').html(data['maxRating'])
-        $('#organization').html(data['organization'])
-
-        console.log(status)
-    });
-</script>
 {%endblock%}

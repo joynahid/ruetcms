@@ -154,6 +154,9 @@ def register():
 
         return redirect(url_for('app_auth.login'))
 
+    if Authenticate():
+        return redirect(url_for('index'))
+        
     return render_template('register.html')
 
 @app_auth.route('/auth/logout')

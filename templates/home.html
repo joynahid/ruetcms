@@ -44,7 +44,7 @@
 
 <br>
 
-<div class="card mb-3 shadow-cs">
+<div class="card mb-3 shadow-cs border-0">
     <div class="card-body">
         <ul class="list-group list-group-flush">
             <li class="list-group-item border-0"><img src="/static/res/profile.svg" width="30px" class="pr-2" /><a href="{{url_for('manager')}}">Analyse Contests</a></li>
@@ -88,31 +88,13 @@
         $('#carouselExampleControls').carousel('prev')
     })
 
-    
-    
-    {% if user is defined %}
-
-        let uri = 'https://codeforces.com/api/user.info?handles='
-        let cf_username = "{{ user['cf'] }}"
-
-        uri+=cf_username+'&lang=en'
-
-        console.log(uri)
-
-        $.getJSON(uri, function(data, status){
-            data = data['result'][0]
-            console.log(data)
-            $('#title_photo').attr('src',data['titlePhoto']);
-            $('#max_rank').html(data['maxRank'])
-            $('#max_rating').html(data['maxRating'])
-        });
-
-        $('#log').submit(function() {
-            $('#sign').html('<i class="fas fa-circle-notch fa-spin fa-lg"></i>')
-            $('#sign').prop('disabled', true);
-        });
-
-    {% endif %}
+    $('#log').submit(function() {
+    $('#sign').html('<i class="fas fa-circle-notch fa-spin fa-lg"></i>')
+    $('#sign').prop('disabled', true);
+});
 
 </script>
+
+{% include './scripts/cfprofile_script.html' %}
+
 {%endblock%}

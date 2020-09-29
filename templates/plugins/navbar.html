@@ -1,40 +1,57 @@
 <nav class="navbar navbar-expand-lg navbar-light fixed m-3" style="border-radius: 15px; background-color: transparent;">
     <div class="container">
-        <a class="navbar-brand" href="{{url_for('index')}}" style="font-size: 25px">RUET<span
-                style="color: rgb(2, 205, 212);"><b>CMS</b></span><sup>β</sup></a>
+
+        <a class="navbar-brand" href="{{url_for('index')}}" style="font-size: 25px">
+            RUET
+            <span style="color: rgb(2, 205, 212);">
+                <b>
+                    CMS
+                </b>
+            </span>
+
+            <sup>β</sup>
+        </a>
+
+
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
             aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
+
         <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav ml-auto text-uppercase">
                 <li class="nav-item active">
-                    <a class="nav-link" href="{{url_for('hallOfFame')}}"><span ="color: rgb(198, 255, 255);"><img
-                                src="/static/res/medal.svg" width="25px" /> Hall of Fame</span></a>
+
+                    <a class="nav-link" href="{{url_for('hallOfFame')}}">
+                        <span="color: rgb(198, 255, 255);"><img src="/static/res/medal.svg" width="25px" /> Hall of
+                            Fame</span>
+                    </a>
+                    
                 </li>
 
                 <li class="nav-item active">
-                    <a class="nav-link" href="{{url_for('index')}}"><i class="fas fa-home"></i> Home</a>
+                    <a class="nav-link" href="{{url_for('index')}}"> Home</a>
                 </li>
 
                 {% if user is defined %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{url_for('profile', username = user['username'])}}"><i class="fas fa-user-circle"></i> {{ user['name']}}</a>
+                    <a class="nav-link" href="{{url_for('profile', username = user['username'])}}">
+                        {{ user['name']}}</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link rounded" href="{{ url_for('app_auth.logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    <a class="nav-link" href="{{ url_for('app_auth.logout') }}"> Logout</a>
                 </li>
 
                 {% else %}
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{url_for('app_auth.login')}}"
-                        style="text-transform: capitalize;"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    <a class="nav-link" href="{{url_for('app_auth.login')}}"> Login</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link rounded" href="{{ url_for('app_auth.register') }}"><i class="fas fa-user-plus"></i> Register</a>
+                    <a class="nav-link" href="{{ url_for('app_auth.register') }}"> Register</a>
                 </li>
 
                 {% endif %}
@@ -43,4 +60,4 @@
     </div>
 </nav>
 
-<hr>
+<hr

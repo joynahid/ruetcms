@@ -3,12 +3,6 @@
   --input-padding-y: .75rem;
 }
 
-body {
-  font-family: 'Ubuntu';
-  background: ghostwhite;
-  background: linear-gradient(to right, ghostwhite, whitesmoke);
-}
-
 .card-signin {
   border: 0;
   border-radius: 1rem;
@@ -121,11 +115,6 @@ input:focus {
 body, #content {
   width: 100%;
   height: 100%;
-}
-
-img {
-  width: 56px;
-  height: 48px;
 }
 
 h1 {

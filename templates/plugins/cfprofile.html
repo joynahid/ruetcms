@@ -1,6 +1,6 @@
 {% if user is defined or profile is defined %}
     <!-- Codeforces Profile Plugin. It has jQuery dependencies -->
-    <div class="card shadow-cs" style="margin: auto; text-align: center;">
+    <div class="card shadow-cs mb-4" style="margin: auto; text-align: center;">
         <img id='title_photo' width="100%" style="border-top-right-radius:15px ; border-top-left-radius: 15px;"/>
         <div class="card-body">
             <p style="font-size: 18px;"><b>{{user['name'] if user is defined else profile['name']}}</b></p>

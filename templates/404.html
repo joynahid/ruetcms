@@ -1,18 +1,10 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style media="screen">
-        body {
-            background: white;
-            color: rgba(0, 0, 0, 0.87);
-        }
-    </style>
-</head>
+{% include './plugins/head.html' %}
 
 <body>
+    {% include './plugins/navbar.html' %}
     <a href="/">
         <div style="display: flex; justify-content: center; align-content: center;">
             <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
@@ -20,4 +12,6 @@
                 background="transparent" speed="1" style="width: 500px; height: 500px;" loop autoplay></lottie-player>
         </div>
     </a>
+
+    <script src="/static/bootstrap/js/bootstrap.min.js" />
 </body>

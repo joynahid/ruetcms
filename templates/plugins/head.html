@@ -1,0 +1,37 @@
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <title>
+        {%block title%}{%endblock%}
+    </title>
+
+    {% block head %}{% endblock %}
+
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        
+        footer {
+            clear: both;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            height: 100px;
+            margin-top: 100px;
+        }
+
+        .card{
+            border-radius: 15px;
+        }
+
+        .shadow-cs{
+            -webkit-box-shadow: -3px 0px 25px -20px rgba(0,0,0,0.75);
+            -moz-box-shadow: -3px 0px 25px -20px rgba(0,0,0,0.75);
+            box-shadow: -3px 0px 25px -20px rgba(0,0,0,0.75);
+        }
+    </style>
+</head>

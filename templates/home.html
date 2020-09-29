@@ -1,11 +1,15 @@
 {% extends 'defaults/authlayout.html' %}
+
 {% block title %} RUETCMS {%endblock%}
+
 {% block content %}
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
 {% for category, message in messages %}
 <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+
     <i class="fas fa-info-circle"></i> {{ message }}
+
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
@@ -13,26 +17,31 @@
 {% endfor %}
 {% endif %}
 {% endwith %}
-    <div class="row">
-        <div class="col">
-            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner shadow-cs">
-                    <div class="card border-0 shadow-cs">
-                        <div class="card-body">
-                        <h6><span id="caro_left" style="color: gray; cursor: pointer;"><i class="fas fa-arrow-left pr-2"></i></span> <span style="color: gray; cursor: pointer;" id="caro_next"><i class="fas fa-arrow-right pr-2"></i></span> RAPL Contest Info</h6>
-                        <hr>
-                        {%for contest in vjContest%}
-                            <div class="carousel-item">
-                                    <h5 class="card-title"><a target="__blank" href="https://vjudge.net/contest/{{contest['id']}}">{{contest['title']}}</a></h5>
-                                    <p class="card-text">This contest was authored by <a target="__blank" href="https://vjudge.net/user/{{contest['author']}}">{{contest['author']}}</a> with {{contest['numOfProblems']}} problems and won by <a target="__blank" href="https://vjudge.net/user/{{contest['top']}}">{{contest['top']}}</a></p>
-                                </div>
-                        {%endfor%}
-                        </div>
+
+<div class="row">
+    <div class="col">
+        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner shadow-cs">
+                <div class="card border-0 shadow-cs">
+                    <div class="card-body">
+                    <h6><span id="caro_left" style="color: gray; cursor: pointer;"><i class="fas fa-arrow-left pr-2"></i></span> <span style="color: gray; cursor: pointer;" id="caro_next"><i class="fas fa-arrow-right pr-2"></i></span> RAPL Contest Info</h6>
+                    
+                    <hr>
+
+                    {%for contest in vjContest%}
+                        <div class="carousel-item">
+                                <h5 class="card-title"><a target="__blank" href="https://vjudge.net/contest/{{contest['id']}}">{{contest['title']}}</a></h5>
+                                <p class="card-text">This contest was authored by <a target="__blank" href="https://vjudge.net/user/{{contest['author']}}">{{contest['author']}}</a> with {{contest['numOfProblems']}} problems and won by <a target="__blank" href="https://vjudge.net/user/{{contest['top']}}">{{contest['top']}}</a></p>
+                            </div>
+                    {%endfor%}
+
                     </div>
                 </div>
             </div>
         </div>
-  </div>
+    </div>
+</div>
+
 <br>
 
 <div class="card mb-3 shadow-cs">
@@ -44,7 +53,11 @@
         </ul>
     </div>
 </div>
+
 {% endblock %}
+
+<!-- Side Bar Contents -->
+
 {%block sidebar%}
 
 {% include './plugins/minilogin.html' %}
@@ -59,6 +72,10 @@
 {% include './plugins/cfprofile.html' %}
 
 {%endblock%}
+
+
+<!-- Additional Scripts -->
+
 {%block script%}
 <script type="text/javascript">
     $('.carousel-item').first().addClass('active')
@@ -70,11 +87,13 @@
     $('#caro_left').click(function(){
         $('#carouselExampleControls').carousel('prev')
     })
+
+    
     
     {% if user is defined %}
 
         let uri = 'https://codeforces.com/api/user.info?handles='
-        let cf_username = '{{ user['cf'] }}'
+        let cf_username = "{{ user['cf'] }}"
 
         uri+=cf_username+'&lang=en'
 
@@ -89,9 +108,9 @@
         });
 
         $('#log').submit(function() {
-                $('#sign').html('<i class="fas fa-circle-notch fa-spin fa-lg"></i>')
-                $('#sign').prop('disabled', true);
-            });
+            $('#sign').html('<i class="fas fa-circle-notch fa-spin fa-lg"></i>')
+            $('#sign').prop('disabled', true);
+        });
 
     {% endif %}
 

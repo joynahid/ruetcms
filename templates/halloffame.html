@@ -1,27 +1,13 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-    <title>Hall of Fame</title>
-</head>
+    {% include './plugins/head.html' %}
 
-<body style="font-family: Roboto;">
+<body>
+
+    {% include './plugins/navbar.html' %}
+
     <div class="container">
-        <div style="margin-top: 20px; margin-bottom: 10px;">
-
-            <span style="font-size: 25px; color: black;" class="navbar-brand">
-                <a href="{{url_for('index')}}" style="color: black;">RUET<span
-                        style="color: rgb(209, 47, 47);"><b>CMS</b></span><sup>β</sup></a>
-
-                <span style="font-size: 20px;">Hall of Fame</span>
-
-            </span>
-        </div>
-
-        <hr>
         <div class="card-columns">
             <div class="card border-0 shadow-sm">
                 <!-- <img class="card-img-top" src="https://www.cse.ruet.ac.bd/public/storage/profile/photo447.jpg" width="200px" alt="Barshon Sen"> -->

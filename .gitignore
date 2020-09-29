@@ -1,6 +1,6 @@
 Pipfile
 Pipfile.lock
 ./ruetcms
-analyzer.py
+sql_analyzer.py
 .env
 chromedriver.exe

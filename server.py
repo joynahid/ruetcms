@@ -5,6 +5,7 @@ import firebase_admin
 from app.app_machine import vjudge_driver
 import subprocess
 from app.app_auth.auth import app_auth, db, Authenticate
+from app.app_analyzer.analyzer import generateFavorite, generateContestPerformanceCombined
 
 app = Flask(__name__, template_folder='templates')
 app.config.from_pyfile('config.py')
@@ -43,8 +44,6 @@ def generate_ranklist():
             'vjudge': vjcontests,
             'codeforces' : cfcontests
         }
-
-        from app.app_analyzer.analyzer import generateFavorite
 
         res = generateFavorite(vjcontests,cfcontests)
 
@@ -88,8 +87,6 @@ def page_not_found(e):
 def performance():
     # print(request.args.get('contestid'))
     if request.args.get('contestid') and request.args.get('weight'):
-
-        from app.app_analyzer.analyzer import generateContestPerformanceCombined
 
         res = list(map(int,request.args.get('contestid').strip().split()))
         reswt = list(map(int,request.args.get('weight').strip().split()))

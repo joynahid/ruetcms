@@ -93,6 +93,9 @@ def performance():
 
         # print(res, reswt)
 
+        if len(res)!=len(reswt):
+            jsonify({'error':'Wrong format! You must give contest ID and weight accordingly'})
+
         fres = generateContestPerformanceCombined(res,reswt)
 
         # print(fres)

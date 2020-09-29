@@ -8,11 +8,10 @@
 
     {% include '/plugins/navbar.html' %}
 
-    <div class="container m-2">
+    <div class="container">
         <div class="row">
-            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-
-                <div class="card card-signin my-5 m-1" style="border-radius: 15px;">
+            <div class="col">
+                <div class="card card-signin m-2">
                     <div class="card-body">
                         <div class="h3 ml-2 mb-4">Register</div>
                         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -45,9 +44,8 @@
                                 <label for="cfHandle">Codeforces Handle</label>
                             </div>
                             <div class="form-label-group">
-                                <input name="vjhandle" type="text" id="vjHandle" class="form-control"
-                                    placeholder="Vjudge Handle">
-                                <label for="vjHandle">Vjudge Handle</label>
+                                <input name="vjhandle" type="text" id="vjHandle" class="form-control" placeholder="Vjudge Handle" required>
+                                <label for="vjHandle">VJudge Handle</label>
                             </div>
                             <div class="form-label-group">
                                 <input name="email" type="email" id="inputEmail" class="form-control"
@@ -62,11 +60,11 @@
                             <button class="btn btn-success text-uppercase mb-4" style="font-size: 18px;"
                                 type="submit">Register
                             </button>
-                            <div style="padding-left: 12px">
+                            <div>
                                 <small>Already have an account?</small>
                             </div>
-                            <a href="{{url_for('app_auth.login')}}"><button class="btn text-uppercase" style="font-size: 16px"
-                                    type="button">Sign in</button>
+                            <a href="{{url_for('app_auth.login')}}"><span class="text-uppercase" style="font-size: 16px"
+                                    type="button">Sign in</span>
                             </a>
                         </form>
                     </div>

@@ -48,12 +48,12 @@
             <div class="form-group">
                 <label for="cfid" class="col-form-label">Contest Number</label>
                 <div class="col-sm-8 p-0">
-                    <input type="text" class="form-control mb-2" id="cfid" placeholder="1303">
+                    <input type="text" class="form-control mb-2" id="cfid" placeholder="1303" required>
                 </div>
 
                 <label for="weight" class="col-form-label">Weight</label>
                 <div class="col-sm-8 p-0">
-                    <input type="text" class="form-control" id="weight" placeholder="12">
+                    <input type="text" class="form-control" id="weight" placeholder="12" required>
                 </div>
             </div>
             <button type="submit" class="btn btn-success mb-2" id="sub"><span>Generate</span></button> <span
@@ -80,10 +80,11 @@
         <!-- <div class="mt-5">
             <a href="#" id="triggerData" class="card-link"><i class="fas fa-file-pdf pr-2"></i> Get PDF</a>
         </div> -->
-        <hr>
+
+        <!-- <hr>
         <div class="mt-2">
             <a href="{{request.referrer}}" class="card-link"><i class="fas fa-arrow-left pr-2"></i> Generate Again</a>
-        </div>
+        </div> -->
     </div>
 </div>
 

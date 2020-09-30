@@ -3,20 +3,13 @@
 {% block title %} RUETCMS {%endblock%}
 
 {% block content %}
-{% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-{% for category, message in messages %}
-<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
 
+<div class="alert alert-dismissible fade show" style="display: none;" role="alert">
     <i class="fas fa-info-circle"></i> {{ message }}
-
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
-{% endfor %}
-{% endif %}
-{% endwith %}
 
 <!-- Include stylesheet -->
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -28,10 +21,12 @@
             Write a blog
         </h5>
 
+        <hr>
+
         <div class="card-text">
             <p>কিছু পরামর্শ</p>
             <p>
-                বাংলা আর্টিকেলের গ্রহণযোগ্যতা বেশি। তাই ৫০% অধিক বাংলা অক্ষরের লেখা জমা করার অনুরোধ করা যাচ্ছে।
+                কপি পেস্ট কন্টেন্ট পোস্ট করা নিষিদ্ধ। নিজের জ্ঞান শেয়ার কর।
             </p>
 
             <p>
@@ -43,21 +38,26 @@
 
         <label class="input-group-label">শিরোনাম</label>
         <input class="input-group p-2 mb-3" style="border:1px solid #ccc" id='title' type="text" name="title"
-            placeholder="একটি প্রাসঙ্গিক শিরোনাম লিখুন" />
+            placeholder="১০০ টি অক্ষরের ভেতরে একটি প্রাসঙ্গিক শিরোনাম লেখ" />
 
         <label class="input-group-label">আর্টিকেল</label>
         <div id="toolbar" class="bg-light"></div>
         <!-- Create the editor container -->
         <div id="editor" class="py-2 mb-3" style="font-size:15px">
             <p>তোমার কাছ থেকে একটি সুন্দর আর্টিকেল আশা করছি। জেনে রাখ, সর্বনিম্ন ৫০ শব্দের আর্টিকেল জমা করা যাবে।</p>
-            <p>তো কি? এ লেখাটি মুছে শুরু করে দাও তোমার মূল্যবান লেখাটি...</p>
+            <p>লেখাটি মুছে ফেলে তোমার লেখাটি শুরু করে দাও। :D</p>
         </div>
 
         <label class="input-group-label">গুরুত্বপূর্ণ শব্দ বা কীওয়ার্ড (কমা দিয়ে লেখ)</label>
         <input class="input-group p-2 mb-3" style="border:1px solid #ccc" type="text" id='tags' name="tags"
             placeholder="বিএফএস, গ্রাফ" />
 
+        <label class="input-group-label">লেখক</label>
+        <input class="input-group p-2 mb-3" style="border:1px solid #ccc" id='author' type="text" name="author"
+            placeholder="" value="{{ user['username'] }}" disabled/>
+
         <button class="btn bg-info text-white">Post</button>
+        <button class="btn bg-info text-white">Save to draft</button>
     </div>
 </div>
 
@@ -85,14 +85,17 @@
 
 <!-- Initialize Quill editor -->
 <script>
-    var toolbarOptions = [{
-            container: '#toolbar'
-        },
-        {
-            'header': [1, 2, 3, 4, 5, 6, false]
-        },
-        'bold', 'underline', 'strike', 'blockquote', 'code-block', 'script', 'link',
-        'list', 'video', 'formula', 'clean'
+    var toolbarOptions = [
+    [{
+            'header': 1
+        }, {
+            'header': 2
+        }], // custom button values
+        ['bold', 'underline', 'strike'], // toggled buttons
+        ['blockquote', 'code-block'],
+        [{
+            'list': 'bullet'
+        }],
     ];
 
     var quill = new Quill('#editor', {
@@ -121,18 +124,25 @@
             url: "{{url_for('blog.blogpost')}}",
             data: {
                 'title': $('#title').val(),
-                'text': JSON.stringify(quill.root.innerHTML),
-                'tags': $('#tags').val()
+                'text': (quill.root.innerHTML),
+                'tags': $('#tags').val(),
+                'author': $('#author').val()
             },
-            error: function(e){
-                console.log(e)
+            error: function () {
+                scrollTo(0,0)
+                $('.alert').text('Something went wrong. Please try again later!')
+                $('.alert').addClass("alert-danger")
+                $('.alert').fadeIn('slow')
             },
-            success: function(e){
-                console.log(e)
+            success: function () {
+                scrollTo(0,0)
+                $('.alert').text('Post updated successfully. Rederecting you to the blog in 3 seconds')
+                $('.alert').addClass("alert-success")
+                $('.alert').fadeIn('slow')
+                window.setTimeout(function(){window.location.href = "{{ url_for('index') }}"},3000);
             }
         });
     })
-    
 </script>
 
 {%endblock%}

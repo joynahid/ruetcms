@@ -1,0 +1,46 @@
+<script>
+    let loading = `
+        <div class="ph-item border-0">
+        <div class="ph-col-12">
+            <div class="ph-row">
+                <div class="ph-col-12 big"></div>
+                <div class="ph-col-12 empty"></div>
+                <div class="ph-col-10"></div>
+                <div class="ph-col-2 empty"></div>
+                <div class="ph-col-10"></div>
+                <div class="ph-col-2 empty"></div>
+                <div class="ph-col-8"></div>
+                <div class="ph-col-4 empty"></div>
+            </div>
+        </div>
+        </div>
+`
+
+    let loadingNumber= 3
+    for (let i = 0; i < loadingNumber; i++) {
+        $('#blogposts').append(loading).fadeIn('slow')
+    }
+
+    RETRIEVE_URL = "{{ url_for('blog.retposts') }}"
+
+    $.getJSON(RETRIEVE_URL, function(dat, status){
+        console.log(dat, status)
+
+        htmldata = ""
+
+        $.each(dat, function(key, data){
+            uri = '<span class="disqus-comment-count" data-disqus-identifier="'+key+'"></span>'
+
+            bodystart = '<div id="' + key +  '" class="card-body">'
+            title = '<h5 class="card-title"><a href="/blog/post/'+ key +'">' + data.title +'</a></h5>'
+            author = '<div class="card-text mb-3" style="font-size:14px">Written by '+ data.author + ' ' + uri + '</div>'
+            text = '<div class="card-text">'+ data.text.substring(0, Math.min(200, data.text.length)) + '</div>'
+            details = '<a href="' + '/blog/post/' + key + '">' + 'See full article</a>'
+            
+            htmldata+= bodystart + title + author + text + details + '</div><hr>'
+        })
+
+        $('#blogposts').hide().html(htmldata).fadeIn('slow')
+    })
+
+</script>

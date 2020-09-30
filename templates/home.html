@@ -2,6 +2,12 @@
 
 {% block title %} RUETCMS {%endblock%}
 
+{%block head%}
+
+<link rel="stylesheet" href="https://unpkg.com/placeholder-loading/dist/css/placeholder-loading.min.css">
+
+{%endblock%}
+
 {% block content %}
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
@@ -28,12 +34,12 @@
                     
                     <hr>
 
-                    {%for contest in vjContest%}
+                    {% for contest in vjContest %}
                         <div class="carousel-item">
                                 <h5 class="card-title"><a target="__blank" href="https://vjudge.net/contest/{{contest['id']}}">{{contest['title']}}</a></h5>
                                 <p class="card-text">This contest was authored by <a target="__blank" href="https://vjudge.net/user/{{contest['author']}}">{{contest['author']}}</a> with {{contest['numOfProblems']}} problems and won by <a target="__blank" href="https://vjudge.net/user/{{contest['top']}}">{{contest['top']}}</a></p>
                             </div>
-                    {%endfor%}
+                    {% endfor %}
 
                     </div>
                 </div>
@@ -44,15 +50,7 @@
 
 <br>
 
-<div class="card mb-3 shadow-cs border-0">
-    <div class="card-body">
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item border-0"><img src="/static/res/profile.svg" width="30px" class="pr-2" /><a href="{{url_for('manager')}}">Analyse Contests</a></li>
-            <li class="list-group-item border-0"><img src="/static/res/performance.svg" width="30px" class="pr-2" /><a href="{{url_for('performance')}}">Codeforces Performance</a></li>
-            <li class="list-group-item border-0"><img src="/static/res/manager.svg" width="30px" class="pr-2" /><a href="{{url_for('vjudgeList')}}">Internal Contest History</a></li>
-        </ul>
-    </div>
-</div>
+<div id="blogposts" class="card mb-3 shadow-cs border-0"></div>
 
 {% endblock %}
 
@@ -60,11 +58,25 @@
 
 {%block sidebar%}
 
+<div class="card mb-3 shadow-cs border-0">
+    <div class="card-body">
+        <h5 class="card-title mb-3">
+            Plugins
+        </h5> 
+        <hr>
+        <li class="list-group-item border-0 m-0 p-0 pb-2"><span class="pr-2 pl-1" style="width: 30px"><i class="fas fa-pen-nib"></i></span> <a href="{{url_for('blog.blogpost')}}">Write an Article</a></li>
+        <li class="list-group-item border-0 m-0 p-0 pb-2"><img src="/static/res/profile.svg" width="30px" class="pr-2" /><a href="{{url_for('manager')}}">Analyse Contests</a></li>
+        <li class="list-group-item border-0 m-0 p-0 pb-2"><img src="/static/res/performance.svg" width="30px" class="pr-2" /><a href="{{url_for('performance')}}">Codeforces Performance</a></li>
+        <li class="list-group-item border-0 m-0 p-0 pb-2"><img src="/static/res/manager.svg" width="30px" class="pr-2" /><a href="{{url_for('vjudgeList')}}">Internal Contest History</a></li>
+    </div>
+</div>
+
 {% include './plugins/minilogin.html' %}
 
 <div class="card border-0 mb-3">
     <div class="card-body">
-    <h5 class="card-title">Leader Board</h5>
+    <h5 class="card-title">Top Contributors</h5>
+    <hr>
     <p class="card-text">Nothing to show currently</p>
     </div>
 </div>
@@ -94,6 +106,10 @@
 });
 
 </script>
+
+<script id="dsq-count-scr" src="//ruetcms.disqus.com/count.js" async></script>
+
+{% include './scripts/retrieve_blogposts.html' %}
 
 {% include './scripts/cfprofile_script.html' %}
 

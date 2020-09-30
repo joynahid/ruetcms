@@ -1,0 +1,138 @@
+{% extends 'defaults/authlayout.html' %}
+
+{% block title %} RUETCMS {%endblock%}
+
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+
+    <i class="fas fa-info-circle"></i> {{ message }}
+
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+<!-- Include stylesheet -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+<div class="card shadow-cs">
+    <div class="card-body">
+
+        <h5 class="card-title mb-4">
+            Write a blog
+        </h5>
+
+        <div class="card-text">
+            <p>কিছু পরামর্শ</p>
+            <p>
+                বাংলা আর্টিকেলের গ্রহণযোগ্যতা বেশি। তাই ৫০% অধিক বাংলা অক্ষরের লেখা জমা করার অনুরোধ করা যাচ্ছে।
+            </p>
+
+            <p>
+                সুন্দর ফরম্যাটে লেখা বাঞ্চনীয়। গুরুত্বপূর্ণ তথ্য <b>বোল্ড</b> বা <u>আন্ডারলাইন</u> করে লেখ।
+            </p>
+        </div>
+
+        <hr>
+
+        <label class="input-group-label">শিরোনাম</label>
+        <input class="input-group p-2 mb-3" style="border:1px solid #ccc" id='title' type="text" name="title"
+            placeholder="একটি প্রাসঙ্গিক শিরোনাম লিখুন" />
+
+        <label class="input-group-label">আর্টিকেল</label>
+        <div id="toolbar" class="bg-light"></div>
+        <!-- Create the editor container -->
+        <div id="editor" class="py-2 mb-3" style="font-size:15px">
+            <p>তোমার কাছ থেকে একটি সুন্দর আর্টিকেল আশা করছি। জেনে রাখ, সর্বনিম্ন ৫০ শব্দের আর্টিকেল জমা করা যাবে।</p>
+            <p>তো কি? এ লেখাটি মুছে শুরু করে দাও তোমার মূল্যবান লেখাটি...</p>
+        </div>
+
+        <label class="input-group-label">গুরুত্বপূর্ণ শব্দ বা কীওয়ার্ড (কমা দিয়ে লেখ)</label>
+        <input class="input-group p-2 mb-3" style="border:1px solid #ccc" type="text" id='tags' name="tags"
+            placeholder="বিএফএস, গ্রাফ" />
+
+        <button class="btn bg-info text-white">Post</button>
+    </div>
+</div>
+
+{% endblock %}
+
+{%block sidebar%}
+
+<div class="card shadow-cs">
+    <div class="card-body">
+        <div class="card-title">
+            Recent articles
+        </div>
+
+        <div class="card-text">
+            Nothing to show
+        </div>
+    </div>
+</div>
+
+{%endblock%}
+
+{%block script%}
+<!-- Include the Quill library -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+<!-- Initialize Quill editor -->
+<script>
+    var toolbarOptions = [{
+            container: '#toolbar'
+        },
+        {
+            'header': [1, 2, 3, 4, 5, 6, false]
+        },
+        'bold', 'underline', 'strike', 'blockquote', 'code-block', 'script', 'link',
+        'list', 'video', 'formula', 'clean'
+    ];
+
+    var quill = new Quill('#editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: toolbarOptions,
+        }
+    });
+
+    let Font = Quill.import('formats/font');
+    // We do not add Sans Serif since it is the default
+    Font.whitelist = ['Hind Siliguri', 'Noto Sans JP'];
+    Quill.register(Font, true);
+
+    function imageHandler() {
+        var range = this.quill.getSelection();
+        var value = prompt('Please copy paste the image url here.');
+        if (value) {
+            this.quill.insertEmbed(range.index, 'image', value, Quill.sources.USER);
+        }
+    }
+
+    $("button").click(function () {
+        $.ajax({
+            type: 'POST',
+            url: "{{url_for('blog.blogpost')}}",
+            data: {
+                'title': $('#title').val(),
+                'text': JSON.stringify(quill.root.innerHTML),
+                'tags': $('#tags').val()
+            },
+            error: function(e){
+                console.log(e)
+            },
+            success: function(e){
+                console.log(e)
+            }
+        });
+    })
+    
+</script>
+
+{%endblock%}

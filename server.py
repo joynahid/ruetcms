@@ -6,12 +6,14 @@ from app.app_machine import vjudge_driver
 import subprocess
 from app.app_auth.auth import app_auth, db, Authenticate
 from app.app_analyzer.analyzer import generateFavorite, generateContestPerformanceCombined
+from app.blog.blog import blog
 
 app = Flask(__name__, template_folder='templates')
 app.config.from_pyfile('config.py')
 
 # Blueprints
 app.register_blueprint(app_auth)
+app.register_blueprint(blog, url_prefix = '/blog')
 
 # Index Page
 @app.route('/')

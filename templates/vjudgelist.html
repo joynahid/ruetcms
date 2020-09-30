@@ -63,7 +63,7 @@ $.getJSON('/vj/listdata', function(dat){
     $.each(dat, function(key, data){
         console.log('Here', data)
         let id = '<td>'+ i++ +'</td>'
-        let title = '<td><a href="https:/vjudge.net/contest/' +data['id'] + '">'+ data['title'] +'</a></td>'
+        let title = '<td><a href="https://vjudge.net/contest/' +data['id'] + '">'+ data['title'] +'</a></td>'
         let author = '<td>'+ data['author'] +'</td>'
         let numOfProblems = '<td>'+ data['numOfProblems'] +'</td>'
         let winner = '<td>'+ data['ranks']['0']['vj'] +'</td>'

@@ -46,7 +46,7 @@ def blogpost():
             'tags': Tags
         })
 
-        return True
+        return make_response({'status': 200})
 
     if Authenticate(): return render_template('postentry.html', user = session['userHandle'])
 

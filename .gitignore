@@ -4,3 +4,4 @@ Pipfile.lock
 sql_analyzer.py
 .env
 chromedriver.exe
+./firebasedb

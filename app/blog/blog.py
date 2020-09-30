@@ -1,7 +1,7 @@
 from flask import *
 from firebase_admin import firestore
 from app.app_auth.auth import Authenticate
-import os
+import os, random
 
 blog = Blueprint('blog', __name__, template_folder='templates', static_folder='/static')
 
@@ -26,24 +26,25 @@ def blogpost():
         tags = request.form['tags']
         author = request.form['author']
 
-        oid = os.environ['BLOGPOST_ID']
-        uid = ''
-        for i in oid:
-            if i.isdigit():
-                uid+=i
+        time = firestore.SERVER_TIMESTAMP
+        doc = db.collection('articles').order_by('timestamp',direction = firestore.Query.DESCENDING).limit(1).stream()
 
-        uid = int(uid) + 1
-        uid = str(uid)
+        uid = None
 
-        os.environ['BLOGPOST_ID'] = uid
+        for i in doc:
+            if i.id:
+                uid = int(i.id) + 1
 
         Tags = tags.split(',')
 
-        db.collection('articles').document(uid).set({
+        if uid == None: uid=1
+
+        db.collection('articles').document(str(uid)).set({
             'title': title,
             'text': text,
             'author': author,
-            'tags': Tags
+            'tags': Tags,
+            'timestamp' : time
         })
 
         return make_response({'status': 200})

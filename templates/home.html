@@ -58,7 +58,7 @@
 
 {%block sidebar%}
 
-<div class="card mb-3 shadow-cs border-0">
+<div class="card mb-3 shadow-cs border-0" style="word-wrap: none !important">
     <div class="card-body">
         <h5 class="card-title mb-3">
             Plugins
@@ -72,6 +72,7 @@
 </div>
 
 {% include './plugins/minilogin.html' %}
+{% include './plugins/cfprofile.html' %}
 
 <div class="card border-0 mb-3">
     <div class="card-body">
@@ -80,8 +81,6 @@
     <p class="card-text">Nothing to show currently</p>
     </div>
 </div>
-
-{% include './plugins/cfprofile.html' %}
 
 {%endblock%}
 

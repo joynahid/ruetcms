@@ -56,12 +56,14 @@ def blogpost():
 
 @blog.route('/retrieveposts')
 def retposts():
-    docs = db.collection('articles').stream()
+    docs = db.collection('articles').order_by('timestamp',direction = firestore.Query.ASCENDING).stream()
 
     data = {}
 
     for doc in docs:
         rdoc = doc.to_dict()
+
+        # print(rdoc)
         data.update({doc.id:rdoc})
     
     return jsonify(data)

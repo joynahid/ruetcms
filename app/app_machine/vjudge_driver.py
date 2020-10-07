@@ -43,7 +43,7 @@ def insert(contest_id, db):
         
         soup = BeautifulSoup(source, 'html.parser')
 
-        webdriver.close()
+        # webdriver.quit()
 
         print('Closed')
 
@@ -84,8 +84,8 @@ def insert(contest_id, db):
 
         db.collection('vjudgeContests').document(str(selfid)).set(ret)
     except Exception as e:
-        print(e.message)
-        webdriver.close()
+        print('WebDriver Error', e)
+        # webdriver.quit()
 
 # insert(376797,4)
 

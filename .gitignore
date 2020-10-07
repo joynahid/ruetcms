@@ -3,5 +3,6 @@ Pipfile.lock
 ./ruetcms
 sql_analyzer.py
 .env
-chromedriver.exe
-./firebasedb
+chromedriver
+env/
+**/__pycache__/

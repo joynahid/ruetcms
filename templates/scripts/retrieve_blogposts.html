@@ -29,13 +29,13 @@
         htmldata = ""
 
         $.each(dat, function(key, data){
-            uri = '<span class="disqus-comment-count" data-disqus-identifier="'+key+'"></span>'
+            uri = '<span class="disqus-comment-count" data-disqus-identifier="'+ data.id +'"></span>'
 
-            bodystart = '<div id="' + key +  '" class="card-body">'
-            title = '<h5 class="card-title"><a href="/blog/post/'+ key +'">' + data.title +'</a></h5>'
+            bodystart = '<div id="' + data.id +  '" class="card-body">'
+            title = '<h4 class="card-title"><a href="/blog/post/'+ data.id +'">' + data.title +'</a></h4>'
             author = '<div class="card-text mb-3" style="font-size:14px">Written by '+ '<a href="/profile/' + data.author + '">' + data.author + '</a>' + uri + '</div>'
             text = '<div class="card-text">'+ data.text.substring(0, Math.min(200, data.text.length)) + '</div>'
-            details = '<a href="' + '/blog/post/' + key + '">' + 'See full article</a>'
+            details = '<a href="' + '/blog/post/' + data.id + '">' + 'See full article</a>'
             
             htmldata+= bodystart + title + author + text + details + '</div><hr>'
         })

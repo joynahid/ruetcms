@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+load_dotenv()
 from flask import *
 import requests, json, os, time
 from firebase_admin import firestore

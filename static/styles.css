@@ -1,7 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+@font-face {
+  font-family: 'Solaiman Lipi';
+  src: url('/static/SolaimanLipi.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 body {
-    font-family: 'Noto Sans JP', 'Hind Siliguri', sans-serif !important;
+    font-family: 'Open Sans','Solaiman Lipi', sans-serif !important;
+    line-height: 1.75;
+    font-size: 16px;
 }
 
 footer {
@@ -17,7 +27,12 @@ footer {
     border-radius: 10px;
 }
 
-.shadow-cs{
+.card-title {
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.shadow-cs {
     -webkit-box-shadow: -3px 0px 25px -20px rgba(0,0,0,0.75);
     -moz-box-shadow: -3px 0px 25px -20px rgba(0,0,0,0.75);
     box-shadow: -3px 0px 25px -20px rgba(0,0,0,0.75);

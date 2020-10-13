@@ -13,6 +13,11 @@ db = firestore.client()
 @blog.route('/post/<entry_uid>')
 def post(entry_uid):
     post = db.collection('articles').document(entry_uid).get().to_dict()
+
+    post['text'] = post['text'].strip()
+    post['text'] = post['text'].replace('\n ','\n')
+    print(repr(post['text']))
+
     return render_template('eachentry.html', post=post, entry_uid=entry_uid)
 
 
@@ -85,17 +90,19 @@ def blogpost():
         if edit_post_id:
             article = db.collection('articles').document(
                 str(edit_post_id)).get().to_dict()
-            try:
-                article['tags'] = str(article['tags'])
-                article['tags'] = article['tags'][2:len(article['tags'])-2]
 
-                article['tags'].replace('\'', '')
+            if article:
+                try:
+                    article['tags'] = str(article['tags'])
+                    article['tags'] = article['tags'][2:len(article['tags'])-2]
 
-                article.update({'edit_id': edit_post_id})
-            except:
-                article['tags'] = ''
+                    article['tags'].replace('\'', '')
 
-            return render_template('postentry.html', user=session['userHandle'], article=article)
+                    article.update({'edit_id': edit_post_id})
+                except:
+                    article['tags'] = ''
+
+                return render_template('postentry.html', user=session['userHandle'], article=article)
 
         return render_template('postentry.html', user=session['userHandle'])
 

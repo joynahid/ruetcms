@@ -1,4 +1,4 @@
-{% extends 'defaults/authlayout.html' %}
+{% extends 'defaults/nolayout.html' %}
 
 {% block title %} {{post['title']}} {%endblock%}
 
@@ -18,30 +18,112 @@
 {% endif %}
 {% endwith %}
 
-<h4 class="ml-3 mt-3" style="border-left: 5px solid gray;">
-    <div class="pl-2">
-    <h3 class="mb-1">{{ post.title }}</h3>
-    <div class="card-text mb-4" style="font-size:14px; font-weight: normal; color: gray;">Written by <a href="\profile\{{post.author}}">{{post.author}}</a> on {{post.timestamp}}</div>
-    </div>
-</h4>
+<style>
+    /** Markdown styling */
+    br {
+        content: 'A';
+        display: block;
+        margin-bottom: 0.5em;
+    }
 
-<div class="card border-0" style="border-radius: 5px; font-size: 18px;">
-    <div class="card-body">
-        <div class="card-text">
-            {{ post.text[0:(post.text|length-1)] | safe }}
+    code {
+        padding: 0 3px;
+        border-radius: 4px;
+        background: #f1f1f1;
+    }
+
+    pre.code {
+        font-size: 90%;
+        padding: 10px;
+        border-radius: 5px;
+        background: #f6f8fa;
+        line-height: 1.5;
+    }
+
+    h1:nth-child(1) {
+        margin-top: 0px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    #article_place h1 {
+        border-bottom: 1px solid #eeeeee !important;
+        margin-bottom: 4px !important;
+        padding-bottom: 8px;
+        font-size: 24px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+    }
+
+    h4 {
+        font-size: 15px;
+    }
+
+    h5 {
+        font-size: 12px;
+    }
+
+    h6 {
+        font-size: 8px;
+    }
+
+    .h1,
+    .h2,
+    .h3,
+    .h4,
+    .h5,
+    .h6,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        margin-top: 1em;
+        margin-bottom: 6px;
+    }
+</style>
+
+<div class="container-fluid mt-0">
+    <div class="container">
+        <div class="ml-3 pt-4">
+            <div class="pl-2">
+                <h1 class="mb-1">{{ post.title }}</h1>
+                <div class="card-text mb-4" style="font-size:14px; font-weight: normal; color: gray;">Written by <a
+                        href="\profile\{{post.author}}">{{post.author}}</a> on {{post.timestamp}}</div>
+            </div>
         </div>
+
+        <div class="card border-0" style="border-radius: 5px; font-size: 16px;">
+            <div class="card-body">
+                <div id='article_place' class="card-text">{{ post.text[0:(post.text|length-1)] }}</div>
+            </div>
+        </div>
+
+        <div id="disqus_thread" class="mt-4"></div>
     </div>
 </div>
-</div>
-
-<div id="disqus_thread" class="mt-4"></div>
 
 {% endblock %}
 
 {% block script %}
+<script src="https://unpkg.com/snarkdown@2.0.0/dist/snarkdown.umd.js"></script>
+
 <script>
-    $('.col-sm-3').remove()
-    $('.col-sm-9').attr('class','col')
+    let md = $('#article_place').text()
+    html = snarkdown(md)
+
+    console.log(md)
+
+    $('#article_place').html(html);
 
     var disqus_config = function () {
 
@@ -60,6 +142,7 @@
         (d.head || d.body).appendChild(s);
     })();
 </script>
+
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
         Disqus.</a></noscript>
 {%endblock%}

@@ -217,7 +217,9 @@ def upcomingContest():
         return jsonify(processed_list)
 
     except Exception as e:
-        print("upcoming contest error", e)
+        return "upcoming contest error" + str(e)
+    
+    return 'Failed'
 
 
 @app.route('/upcoming_contests')

@@ -1,6 +1,6 @@
 <script>
 
-        let loading = `
+    let loading = `
             Please wait...
     `
 
@@ -11,26 +11,51 @@
 
     let notok = true;
 
-    $.getJSON(RETRIEVE_URL, function (dat, status) {
-
-        console.log(status)
-
+    DATA = JSON.parse(localStorage.getItem('uc__'));
+    if (DATA.length) {
         $('#upcoming-contests').html("");
-        DATA = dat;
         let it = 1;
-        $.each(dat, function (key, val) {
+        $.each(DATA, function (key, val) {
             notok = false;
-            let title = '<a href="' + val['href'] + '" data-toggle="tooltip" data-placement="top" title="Topcoder"><h5>' + val['name'] + '</h5></a>';
-            let starts_in = '<p> Starts in <span id="count-down">' + val['start'] + ' </span></p>';
+            let title = '<a href="' + val['href'] + '" data-toggle="tooltip" data-placement="top" title="' + val['platform'] + '">' + '<h5>[' + val['platform'] + '] ' + val['name'] + '</h5></a></p>';
+            let starts_in = `<p> ${val['start'] != 'Running' ? 'Starts in' : ''} <span id="count-down">` + val['start'] + ' </span></p>';
 
-            $('#upcoming-contests').append('<div id="' + it.toString() + '">' + title + starts_in + '<span style="font-size:12px" onclick="createPost(this)" id="create-post" style="cursor: pointer">Create Post</span></div><hr>');
+            $('#upcoming-contests').append('<div id="' + it.toString() + '">' + title + starts_in + '<span style="font-size:12px; cursor: pointer" onclick="createPost(this)" id="create-post" style="cursor: pointer">Create Post</span></div><hr>');
             it++;
         });
+    }
+    else
+        retrieveContests();
 
-        if (notok) {
-            $('#upcoming-contests').html("No upcoming contest");
-        }
+    $('#refresh_uc').click(function(){
+        retrieveContests();
+        $(this).addClass('fa-spin');
     });
+
+    function retrieveContests() {
+        $.getJSON(RETRIEVE_URL, function (dat, status) {
+            $('#refresh_uc').removeClass('fa-spin');
+
+            console.log(status)
+
+            DATA = dat;
+            let it = 1;
+            $.each(dat, function (key, val) {
+                notok = false;
+                let title = '<a href="' + val['href'] + '" data-toggle="tooltip" data-placement="top" title="' + val['platform'] + '">' + '<h5>[' + val['platform'] + '] ' + val['name'] + '</h5></a></p>';
+                let starts_in = `<p> ${val['start'] != 'Running' ? 'Starts in' : ''} <span id="count-down">` + val['start'] + ' </span></p>';
+
+                $('#upcoming-contests').append('<div id="' + it.toString() + '">' + title + starts_in + '<span style="font-size:12px; cursor: pointer" onclick="createPost(this)" id="create-post" style="cursor: pointer">Create Post</span></div><hr>');
+                it++;
+            });
+
+            localStorage.setItem('uc__', JSON.stringify(DATA));
+
+            if (notok) {
+                $('#upcoming-contests').html("No upcoming contest");
+            }
+        });
+    }
 
     function createPost(el) {
         let textAreaLoc = $(el).parent();
@@ -38,16 +63,19 @@
 
         let textAreaContent = `
 <textarea class="form-control" rows="6">
-${DATA[id - 1]['name']}
+Contest in ${DATA[id - 1]['platform']}
 
+Title: ${DATA[id - 1]['name']}
 Starts: ${DATA[id - 1]['date']}
 Duration: ${DATA[id - 1]['duration']}
 
-${DATA[id - 1]['href']}
+Link: ${DATA[id - 1]['href']}
 </textarea>
             `;
 
         textAreaLoc.html(textAreaContent.toString());
     }
+
+
 
 </script>

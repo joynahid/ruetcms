@@ -30,7 +30,7 @@
             <div class="carousel-inner">
                 <div class="card border-0">
                     <div class="card-body">
-                        <h6><span id="caro_left" style="color: gray; cursor: pointer;"><i
+                        <h6 class="card-title"><span id="caro_left" style="color: gray; cursor: pointer;"><i
                                     class="fas fa-arrow-left pr-2"></i></span> <span
                                 style="color: gray; cursor: pointer;" id="caro_next"><i
                                     class="fas fa-arrow-right pr-2"></i></span> RAPL Contest Info</h6>
@@ -39,7 +39,7 @@
 
                         {% for contest in vjContest %}
                         <div class="carousel-item">
-                            <h5 class="card-title"><a target="__blank"
+                            <h5><a target="__blank"
                                     href="https://vjudge.net/contest/{{contest['id']}}">{{contest['title']}}</a></h5>
                             <p class="card-text">This contest was authored by <a target="__blank"
                                     href="https://vjudge.net/user/{{contest['author']}}">{{contest['author']}}</a> with
@@ -57,7 +57,7 @@
         <div class="card border-0 shadow-cs">
             <div class="card-body">
                 <div class="card-title">
-                    <a href="{{ url_for('upcomingContest') }}">Upcoming Contests</a>
+                    <a href="{{ url_for('upcomingContestPage') }}">Upcoming Contests</a>
                 </div>
                 <hr>
                 <div id='upcoming-contest'>Retrieving...</div>

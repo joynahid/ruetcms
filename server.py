@@ -204,7 +204,8 @@ def upcomingContest():
                             'name': each['event'],
                             'href': each['href'],
                             'date': each['date'],
-                            'duration': str(int(each['duration']/3600)) + " hours"
+                            'duration': str(int(each['duration']/3600)) + " hours",
+                            'platform': i.capitalize()
                         }
 
                 if contest_data:

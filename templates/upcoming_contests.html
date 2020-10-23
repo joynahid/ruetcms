@@ -13,15 +13,18 @@
 {% endfor %}
 {% endif %}
 {% endwith %}
-<div class="card bg-white table-bordered mb-4 ">
+<div class="card bg-white border-0 mb-4 ">
     <div class="card-body p-5">
-        <h5 class="card-title mb-4">
-            <div class="mr-auto">Upcoming Contests</div>
+        <h5 class="card-title mb-4 d-flex justify-content-between">
+            <p class="align-self-start">Upcoming Contests</p>
+            <p class="align-self-end"><i id="refresh_uc" style="cursor: pointer" class="fas fa-sync" onclick="retrieveContests()"></i></p>
         </h5>
+
+        <hr>
 
         <div id="upcoming-contests"></div>
 
-        <div class="mt-2">
+        <div class="mt-4">
             <a href="{{request.referrer}}" class="card-link"><i class="fas fa-arrow-left pr-2"></i> Back</a>
         </div>
     </div>

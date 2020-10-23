@@ -3,7 +3,6 @@ import requests, json, os, time
 from firebase_admin import firestore
 import firebase_admin
 from app.app_machine import vjudge_driver
-import subprocess
 from app.app_auth.auth import app_auth, db, Authenticate
 from app.app_analyzer.analyzer import generateFavorite, generateContestPerformanceCombined
 from app.blog.blog import blog

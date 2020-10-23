@@ -13,12 +13,17 @@
 {% endfor %}
 {% endif %}
 {% endwith %}
+<<<<<<< HEAD
 <div class="card bg-white">
+=======
+<div class="card bg-white rounded shadow-sm">
+>>>>>>> 66894d29abca90a0e11a4c213d858d344b7ac9af
     <div class="card-body p-5">
         <h5 class="card-title">
             Performance Checker (Codeforces Only)
         </h5>
 
+<<<<<<< HEAD
         <div class="card border-0 shadow-sm mb-4" style="border-radius: 15px; margin-bottom: 4px;">
             <div class="card-body p-0">
                 <div class="card-header" style="background-color: transparent;">Tips
@@ -43,17 +48,26 @@
                 </ul>
             </div>
         </div>
+=======
+>>>>>>> 66894d29abca90a0e11a4c213d858d344b7ac9af
 
         <form id='contestids'>
             <div class="form-group">
                 <label for="cfid" class="col-form-label">Contest Number</label>
                 <div class="col-sm-8 p-0">
+<<<<<<< HEAD
                     <input type="text" class="form-control mb-2" id="cfid" placeholder="1303" required>
                 </div>
 
                 <label for="weight" class="col-form-label">Weight</label>
                 <div class="col-sm-8 p-0">
                     <input type="text" class="form-control" id="weight" placeholder="12" required>
+=======
+                    <input type="text" class="form-control" id="cfid" placeholder="1303">
+                </div>
+                <div class="col-sm-8 p-0">
+                    <input type="text" class="form-control" id="weight" placeholder="12">
+>>>>>>> 66894d29abca90a0e11a4c213d858d344b7ac9af
                 </div>
             </div>
             <button type="submit" class="btn btn-success mb-2" id="sub"><span>Generate</span></button> <span
@@ -63,7 +77,11 @@
 
         <div id="title" style="hidden" class="pb-2 pt-2"></div>
 
+<<<<<<< HEAD
         <table class="table shadow-sm table-bordered w-100 d-block d-md-table table-responsive" id="mainlist">
+=======
+        <table class="table shadow-sm table-bordered" id="mainlist">
+>>>>>>> 66894d29abca90a0e11a4c213d858d344b7ac9af
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">#</th>
@@ -75,6 +93,7 @@
             <tbody></tbody>
         </table>
 
+<<<<<<< HEAD
         <!-- <div id="Result"></div> -->
 
         <!-- <div class="mt-5">
@@ -82,6 +101,14 @@
         </div> -->
 
         <!-- <hr>
+=======
+        <!-- <div id="Result"></div>
+
+        <div class="mt-5">
+            <a href="#" id="triggerData" class="card-link"><i class="fas fa-file-pdf pr-2"></i> Get PDF</a>
+        </div>
+        <hr>
+>>>>>>> 66894d29abca90a0e11a4c213d858d344b7ac9af
         <div class="mt-2">
             <a href="{{request.referrer}}" class="card-link"><i class="fas fa-arrow-left pr-2"></i> Generate Again</a>
         </div> -->
@@ -92,7 +119,11 @@
 
 
 {%block sidebar%}
+<<<<<<< HEAD
 
+=======
+<canvas id="myChart" width="400" height="400"></canvas>
+>>>>>>> 66894d29abca90a0e11a4c213d858d344b7ac9af
 {%endblock%}
 
 {%block script%}
@@ -100,8 +131,12 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
+<<<<<<< HEAD
         $('#mainlist').find('tbody').append(
             "<td colspan=4 class='bg-light'><center>No Data to Show</center></td>");
+=======
+        $('#mainlist').find('tbody').append("<td colspan=4 class='bg-light'><center>No Data to Show</center></td>");
+>>>>>>> 66894d29abca90a0e11a4c213d858d344b7ac9af
 
         $("form").submit(function (e) {
 
@@ -109,23 +144,38 @@
 
             $('#loading').css('visibility', 'visible');
             $("#sub").prop('disabled', true);
+<<<<<<< HEAD
             $("#sub").css({
                 'background': 'black',
                 'color': 'white'
             });
             $("#sub span").text('Working...');
 
+=======
+            $("#sub").css({ 'background': 'black', 'color': 'white' });
+            $("#sub span").text('Working...');
+
+            $('#myChart').empty();
+
+>>>>>>> 66894d29abca90a0e11a4c213d858d344b7ac9af
             cid = $('input:first').val();
             wt = $('#weight').val();
 
             $.ajax({
                 type: "GET",
+<<<<<<< HEAD
                 url: 'https://codeforces.com/api/contest.standings?contestId=' + cid +
                     '&from=1&count=1&showUnofficial=true',
                 data: '',
                 success: function (data) {
                     $("#title").text('Showing report from ' + data.result.contest.name)
                         .fadeIn('slow');
+=======
+                url: 'https://codeforces.com/api/contest.standings?contestId=' + cid + '&from=1&count=1&showUnofficial=true',
+                data: '',
+                success: function (data) {
+                    $("#title").text('Showing report from ' + data.result.contest.name).fadeIn('slow');
+>>>>>>> 66894d29abca90a0e11a4c213d858d344b7ac9af
                 }
             });
 
@@ -153,11 +203,18 @@
                         return color;
                     }
 
+<<<<<<< HEAD
                     $.each(data, function (key, element) {
                         var htm = "<tr><td>" + cnt + "</td><td>" + element.id +
                             "</td> <td>" + element.capability + "%</td><td>" +
                             element.time + " minutes</td></tr>";
 
+=======
+
+                    $.each(data, function (key, element) {
+                        var htm = "<tr><td>" + cnt + "</td><td>" + element.id + "</td> <td>" + element.capability + "%</td><td>" + element.time + " minutes</td></tr>";
+                        
+>>>>>>> 66894d29abca90a0e11a4c213d858d344b7ac9af
                         console.log(htm)
 
                         lbls.push(element.capability);
@@ -167,25 +224,76 @@
                     });
 
                     if (cnt == 0) {
+<<<<<<< HEAD
                         $('#mainlist').find('tbody').append(
                             '<tr colspan=4>No Data Found</tr>')
                     }
 
+=======
+                        $('#mainlist').find('tbody').append('<tr colspan=4>No Data Found</tr>')
+                    }
+
+                    // Chart.defaults.global.title('bottom');
+
+                    var ctx = document.getElementById('myChart').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: dd,
+                            datasets: [{
+                                label: 'Capabilitis (%)',
+                                data: lbls,
+                                borderColor: bgcolor,
+                                pointBackgroundColor: bgcolor,
+                                borderWidth: 4,
+                                pointRadius: 3
+                            }]
+
+                        },
+                        options: {
+                            title: {
+                                display: true,
+                                text: 'Capability Chart'
+                            },
+                            legend: {
+                                display: false
+                            },
+                            scales: {
+                                xAxes: [{
+                                    gridLines: {
+                                        display: false
+                                    }
+                                }],
+                                yAxes: [{
+                                    gridLines: {
+                                        display: false
+                                    }
+                                }]
+                            }
+                        }
+                    });
+
+>>>>>>> 66894d29abca90a0e11a4c213d858d344b7ac9af
                     $('#mainlist').find('tbody').fadeIn();
 
 
                     $('#loading').css('visibility', 'hidden');
                     $("#sub").prop('disabled', false);
+<<<<<<< HEAD
                     $("#sub").css({
                         'background': '',
                         'color': ''
                     });
+=======
+                    $("#sub").css({ 'background': '', 'color': '' });
+>>>>>>> 66894d29abca90a0e11a4c213d858d344b7ac9af
                     $("#sub span").text('Generate');
 
                 },
                 error: function (xmlHttpRequest, textStatus, errorThrown) {
                     $('#loading').css('visibility', 'hidden');
                     $("#sub").prop('disabled', false);
+<<<<<<< HEAD
                     $("#sub").css({
                         'background': '',
                         'color': ''
@@ -193,6 +301,12 @@
                     $("#sub span").text('Generate');
                     alert(errorThrown);
 
+=======
+                    $("#sub").css({ 'background': '', 'color': '' });
+                    $("#sub span").text('Generate');
+                    alert(errorThrown);
+                    
+>>>>>>> 66894d29abca90a0e11a4c213d858d344b7ac9af
                 }
             });
         });

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends 'defaults/authlayout.html' %}
 
 {% block title %} RUETCMS {%endblock%}
@@ -135,4 +136,62 @@
 {% include './scripts/retrieve_upcontests.html' %}
 {% include './scripts/cfprofile_script.html' %}
 
+=======
+{% extends 'defaults/authlayout.html' %}
+{% block title %} RUETCMS {%endblock%}
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+    <i class="fas fa-info-circle"></i> {{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<div class="display-4 p-2">Hey {{auth['personal']['firstname']}}!</div>
+<hr>
+<div class="h3 p-2 pb-4">Welcome to Contest Management System</div>
+<div class="card">
+    <div class="card-header bg-dark text-white">
+        What can I do?
+    </div>
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><a href="{{url_for('manager')}}">Manager Mode</a> <span
+                    class="badge badge-primary badge-pill">new</span></li>
+            <li class="list-group-item"><a href="{{url_for('performance')}}">Codeforces Manager</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+{%block sidebar%}
+<div class="card rounded shadow-sm" style="max-width: 300px; margin: auto; text-align: center;">
+    <div class="card-header bg-dark text-white"> Codeforces Profile </div>
+    <img src="{{ info['titlePhoto'] }}" width="100%" />
+    <div class="card-body">
+        <p style="font-size: 18px;"> <b>{{auth['personal']['firstname']}}</b></p>
+        <hr>
+        <p class="p-0 m-0" style="font-weight: bold;"><small>
+                <span id="fletter"
+                    style="color:{{color}}; text-transform: uppercase; font-weight: bold; font-size: 12">{{ info['maxRank'] }}</span>
+            </small>
+        </p>
+        <p id='rating'>{{ info['maxRating'] }}</p>
+    </div>
+</div>
+{%endblock%}
+{%block script%}
+<script type="text/javascript">
+    var tm = $("#rating").text();
+    var text = '<span style="color:black">' + $('#fletter').text().charAt(0) + '</span>';
+    var x = parseInt(tm)
+    if (x >= 3000) {
+        $("#fletter").html(text + $('#fletter').text().slice(1, $('#fletter').text().length));
+    }
+</script>
+>>>>>>> 66894d29abca90a0e11a4c213d858d344b7ac9af
 {%endblock%}

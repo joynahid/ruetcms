@@ -3,9 +3,21 @@
   --input-padding-y: .75rem;
 }
 
+<<<<<<< HEAD
 .card-signin {
   border: 0;
   border-radius: 15px;
+=======
+body {
+  font-family: 'Ubuntu';
+  background: ghostwhite;
+  background: linear-gradient(to right, ghostwhite, whitesmoke);
+}
+
+.card-signin {
+  border: 0;
+  border-radius: 1rem;
+>>>>>>> 66894d29abca90a0e11a4c213d858d344b7ac9af
   box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
 }
 
@@ -112,6 +124,19 @@ input:focus {
   }
 }
 
+<<<<<<< HEAD
+=======
+body, #content {
+  width: 100%;
+  height: 100%;
+}
+
+img {
+  width: 56px;
+  height: 48px;
+}
+
+>>>>>>> 66894d29abca90a0e11a4c213d858d344b7ac9af
 h1 {
   font-weight: 200;
   font-style: 26px;

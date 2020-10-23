@@ -1,0 +1,31 @@
+{% extends 'defaults/mainlayout.html' %}
+{% block title %} CMS Starter {%endblock%}
+{% block content %}
+<div class="row">
+    <div class="col-sm-9">
+        <div class="card bg-white shadow-sm">
+            <div class="card-header bg-secondary text-white">
+                Codeforces Contest Crawler
+            </div>
+            <form class="form-signin" action="{{ url_for('insert')}}" method="post">
+            </form>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="card bg-white shadow-sm">
+            <div class="card-body">
+                <div class="mx-auto" style="width: auto;">
+                    <img class="m-1 rounded" style="border: 1px solid {{ color  }}" src="{{ info['titlePhoto'] }}" width="50%">
+                    <h6 class="card-title pl-2"> {{ info['handle'] }}</h6>
+                </div>
+                <ul class="list-group list-group-flush b-0">
+                    <li class="list-group-item small p-1" style="text-transform: capitalize;"><i class="fas fa-flag-checkered pr-1"></i> </i>
+                        <font color="{{color}}"> {{ info['maxRank'] }}</font>
+                    </li>
+                    <li class="list-group-item small p-1"><i class="far fa-star pr-1"></i>{{ info['maxRating'] }} </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

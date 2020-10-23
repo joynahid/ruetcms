@@ -191,6 +191,7 @@ def upcomingContest():
                 time_msg+=str(delta_mins) + ' minutes'
 
             each['start'] = time_msg
+            each['date'] = contest_start_time.strftime("%m/%d/%Y, %I:%M:%S %p %Z")
 
             if time_delta < 0: break
 
@@ -205,6 +206,8 @@ def upcomingContest():
                             'start': each['start'],
                             'name': each['event'],
                             'href': each['href'],
+                            'date': each['date'],
+                            'duration': str(int(each['duration']/3600)) + " hours"
                         }
 
                 if contest_data:

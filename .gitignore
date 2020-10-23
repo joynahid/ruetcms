@@ -5,3 +5,5 @@ chromedriver
 env/
 **/__pycache__/
 .vscode
+.git
+.vscode

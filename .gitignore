@@ -1,0 +1,7 @@
+./ruetcms
+sql_analyzer.py
+.env
+chromedriver
+env/
+**/__pycache__/
+.vscode

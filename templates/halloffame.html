@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+{% include './plugins/head.html' %}
+
+<body>
+
+    {% include './plugins/navbar.html' %}
+
+    <div class="container" id="fame-container">
+        <h2 class="card-title mt-4">Hall Of Fame</h2>
+        <hr>
+        <p>This is just a little tribute to all the past and current contestants and contributors of RUET Analytical Programming Lab. Good news is if you have a codeforces ID, it will automatically fetch it from there. This is open source, you can
+            add, edit any information anytime. But it is highly recommended not to do any spamming. It will make your IP
+            blocked.</p>
+        <hr>
+        <div class="card-columns mt-4">
+            <div class="card">
+                <!-- <img class="card-img-top" src="https://www.cse.ruet.ac.bd/public/storage/profile/photo447.jpg" width="200px" alt="Barshon Sen"> -->
+                <div class="card-body">
+                    <h5 class="card-title">Barshon Sen</h5>
+                    <p class="card-text">RAPL's all time favorite mentor and director</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include './plugins/scripts.html' %}
+    {% include './scripts/hall_of_fame.html' %}
+</body>
+
+</html>

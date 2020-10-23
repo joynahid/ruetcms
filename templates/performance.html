@@ -1,0 +1,201 @@
+{% extends 'defaults/authlayout.html' %}
+{% block title %} Performance Monitoring {%endblock%}
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+    <i class="fas fa-info-circle"></i> {{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<div class="card bg-white">
+    <div class="card-body p-5">
+        <h5 class="card-title">
+            Performance Checker (Codeforces Only)
+        </h5>
+
+        <div class="card border-0 shadow-sm mb-4" style="border-radius: 15px; margin-bottom: 4px;">
+            <div class="card-body p-0">
+                <div class="card-header" style="background-color: transparent;">Tips
+                </div>
+                <li class="list-group-item border-0" style="background-color: transparent;">
+                    This generates the value of a contestant. Less ranked contestant is more likely to do well in a
+                    contest than others based on Codeforces performance
+                </li>
+                <ul class=" list-group border-0">
+                    <li class="list-group-item border-0" style="background-color: transparent;">
+                        Insert only valid codeforces contest ID. You will find it in the contest link or URL.
+                    </li>
+
+                    <li class="list-group-item border-0" style="background-color: transparent;">
+                        To retrieve multiple contest insert IDs separated by space. You must enter weight accordingly to
+                        set priority of a contest. You can input it too using space separator.
+                    </li>
+
+                    <li class="list-group-item border-0" style="background-color: transparent;">
+                        It will take as long time as the number of contest you perform query.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <form id='contestids'>
+            <div class="form-group">
+                <label for="cfid" class="col-form-label">Contest Number</label>
+                <div class="col-sm-8 p-0">
+                    <input type="text" class="form-control mb-2" id="cfid" placeholder="1303" required>
+                </div>
+
+                <label for="weight" class="col-form-label">Weight</label>
+                <div class="col-sm-8 p-0">
+                    <input type="text" class="form-control" id="weight" placeholder="12" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success mb-2" id="sub"><span>Generate</span></button> <span
+                id="loading" style="visibility: hidden; padding-left: 5px"><span class="pl-2"><i
+                        class="fas fa-circle-notch fa-spin fa-lg"></i></span></span>
+        </form>
+
+        <div id="title" style="hidden" class="pb-2 pt-2"></div>
+
+        <table class="table shadow-sm table-bordered w-100 d-block d-md-table table-responsive" id="mainlist">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Capability</th>
+                    <th scope="col">Estimated Time</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <!-- <div id="Result"></div> -->
+
+        <!-- <div class="mt-5">
+            <a href="#" id="triggerData" class="card-link"><i class="fas fa-file-pdf pr-2"></i> Get PDF</a>
+        </div> -->
+
+        <!-- <hr>
+        <div class="mt-2">
+            <a href="{{request.referrer}}" class="card-link"><i class="fas fa-arrow-left pr-2"></i> Generate Again</a>
+        </div> -->
+    </div>
+</div>
+
+{%endblock%}
+
+
+{%block sidebar%}
+
+{%endblock%}
+
+{%block script%}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#mainlist').find('tbody').append(
+            "<td colspan=4 class='bg-light'><center>No Data to Show</center></td>");
+
+        $("form").submit(function (e) {
+
+            e.preventDefault();
+
+            $('#loading').css('visibility', 'visible');
+            $("#sub").prop('disabled', true);
+            $("#sub").css({
+                'background': 'black',
+                'color': 'white'
+            });
+            $("#sub span").text('Working...');
+
+            cid = $('input:first').val();
+            wt = $('#weight').val();
+
+            $.ajax({
+                type: "GET",
+                url: 'https://codeforces.com/api/contest.standings?contestId=' + cid +
+                    '&from=1&count=1&showUnofficial=true',
+                data: '',
+                success: function (data) {
+                    $("#title").text('Showing report from ' + data.result.contest.name)
+                        .fadeIn('slow');
+                }
+            });
+
+            // console.log(wt);
+
+            $.ajax({
+                type: "GET",
+                url: "{{url_for('performance')}}" + '?contestid=' + cid + '&weight=' + wt,
+                data: '',
+                success: function (data) {
+                    $('#mainlist').find('tbody').empty();
+                    $('#mainlist').find('tbody').hide();
+                    var cnt = 1;
+
+                    var lbls = [];
+                    var dd = [];
+                    var bgcolor = [];
+
+                    function getRandomColor() {
+                        var letters = 'ABCDEF0123456789';
+                        var color = '#';
+                        for (var i = 0; i < 6; i++) {
+                            color += letters[Math.floor(Math.random() * 16)];
+                        }
+                        return color;
+                    }
+
+                    $.each(data, function (key, element) {
+                        var htm = "<tr><td>" + cnt + "</td><td>" + element.id +
+                            "</td> <td>" + element.capability + "%</td><td>" +
+                            element.time + " minutes</td></tr>";
+
+                        console.log(htm)
+
+                        lbls.push(element.capability);
+                        dd.push(cnt++);
+                        bgcolor.push(getRandomColor());
+                        $('#mainlist').find('tbody').append(htm);
+                    });
+
+                    if (cnt == 0) {
+                        $('#mainlist').find('tbody').append(
+                            '<tr colspan=4>No Data Found</tr>')
+                    }
+
+                    $('#mainlist').find('tbody').fadeIn();
+
+
+                    $('#loading').css('visibility', 'hidden');
+                    $("#sub").prop('disabled', false);
+                    $("#sub").css({
+                        'background': '',
+                        'color': ''
+                    });
+                    $("#sub span").text('Generate');
+
+                },
+                error: function (xmlHttpRequest, textStatus, errorThrown) {
+                    $('#loading').css('visibility', 'hidden');
+                    $("#sub").prop('disabled', false);
+                    $("#sub").css({
+                        'background': '',
+                        'color': ''
+                    });
+                    $("#sub span").text('Generate');
+                    alert(errorThrown);
+
+                }
+            });
+        });
+    });
+</script>
+{%endblock%}

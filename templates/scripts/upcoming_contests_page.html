@@ -1,0 +1,46 @@
+<script>
+
+//     let loading = `
+//         <div class="ph-item border-0">
+//         <div class="ph-col-12">
+//             <div class="ph-row">
+//                 <div class="ph-col-12 big"></div>
+//                 <div class="ph-col-12 empty"></div>
+//                 <div class="ph-col-10"></div>
+//                 <div class="ph-col-2 empty"></div>
+//                 <div class="ph-col-10"></div>
+//                 <div class="ph-col-2 empty"></div>
+//                 <div class="ph-col-8"></div>
+//                 <div class="ph-col-4 empty"></div>
+//             </div>
+//         </div>
+//         </div>
+// `
+
+//     let loadingNumber = 3
+//     for (let i = 0; i < loadingNumber; i++) {
+//         $('#upcoming-contests').append(loading).fadeIn('slow')
+//     }
+
+    RETRIEVE_URL = "{{ url_for('upcomingContest') }}";
+
+    let notok = true;
+    let countTo;
+
+    $.getJSON(RETRIEVE_URL, function (dat, status) {
+
+        let it = 1;
+        $.each(dat, function (key, val) {
+            notok = false;
+            let title = '<a href="' + val['href'] + '"><h5>' + val['name'] + '</h5></a>';
+            let starts_in = '<p> Starts in <span id="count-down">' + val['start'] +' seconds</span></p>';
+
+            $('#upcoming-contests').append('<div id="'+ it.toString() + '">' + title + starts_in + '<span id="create-post" style="cursor: pointer">Create Post</span></div><hr>');
+        });
+
+        if (notok) {
+            $('#upcoming-contests').html("No upcoming contest");
+        }
+    });
+
+</script>

@@ -1,0 +1,45 @@
+{% if user is defined %}
+
+<script>
+
+    let RANK_COLOR = {
+        'newbie' : 'gray',
+        'pupil' : 'green',
+        'specialist':'cyan',
+        'expert': 'blue',
+        'candidate master': 'violet',
+        'master':'orange',
+        'international master':'orange'
+    }
+
+
+    let uri = 'https://codeforces.com/api/user.info?handles='
+    let cf_username = "{{profile['cf'] if user and profile else user['cf']}}"
+
+    uri += cf_username + '&lang=en'
+    let usr = cf_username + '__'
+
+    if (localStorage.getItem(usr)) {
+        data = JSON.parse(localStorage.getItem(usr))
+
+        mxRank = '<span style="color:'+RANK_COLOR[data['maxRank']]+';">'+data['maxRank']+'</span>';
+
+        $('#title_photo').attr('src', data['titlePhoto']);
+        $('#max_rank').html(mxRank)
+        $('#max_rating').html(data['maxRating'])
+        $('#organization').html(data['organization'])
+    } else {
+        $.getJSON(uri, function(data, status) {
+            data = data['result'][0]
+            
+            mxRank = '<span style="color:'+RANK_COLOR[data['maxRank']]+';">'+data['maxRank']+'</span>';
+            
+            $('#title_photo').attr('src', data['titlePhoto']);
+            $('#max_rank').html(mxRank)
+            $('#max_rating').html(data['maxRating'])
+            $('#organization').html(data['organization'])
+            localStorage.setItem(usr, JSON.stringify(data))
+        });
+    }
+</script>
+{% endif %}

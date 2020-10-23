@@ -1,0 +1,49 @@
+<script>
+
+RETRIEVE_URL = "{{ url_for('upcomingContest') }}";
+
+let notok = true;
+let countTo;
+
+$.getJSON(RETRIEVE_URL, function(dat, status){
+    $.each(dat, function(key,val){
+        notok=false;
+        let title = '<a href="'+ val['href'] +'"><h6>'+ val['name'] + '</h6></a>';
+        let starts_in = '<p> Starts in <span id="count-down">please wait...</span></p>';
+
+        countTo = new Date();
+
+        countTo.setSeconds(countTo.getSeconds()+val['time_delta']);
+        
+        $('#upcoming-contest').html(title+starts_in);
+    });
+
+    if(notok)
+    {
+        $('#upcoming-contest').html("No upcoming contest");
+    }
+});
+
+var x = setInterval(function() {
+
+// Get today's date and time
+var now = new Date().getTime();
+  
+// Find the distance between now and the count down date
+var distance = countTo - now;
+
+var starts_in = "";
+
+// Time calculations for days, hours, minutes and seconds
+var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+if(days) starts_in+= days.toString() + ' days ';
+var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+if(hours) starts_in+= hours.toString() + ' hours ';
+var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+if(minutes) starts_in+=minutes.toString() + ' minutes'
+  
+// Output the result in an element with id="demo"
+$("#count-down").text(starts_in);
+}, 1000);
+
+</script>

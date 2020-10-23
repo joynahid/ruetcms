@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+{% include './plugins/head.html' %}
+
+<body style="font-family: 'Noto Sans JP', sans-serif;">
+
+    <!-- Navigation -->
+
+    {% include './plugins/navbar.html' %}
+
+    <!-- Page Content -->
+
+    <section class="py-3">
+        <div class="container">
+            {%block fullcontent%}{%endblock%}
+            <div class="row">
+                <div class="col-sm-3">
+                    {%block smallcolumn%}{%endblock%}
+                </div>
+                <div class="col-sm-5">
+                    {%block bigcolumn%}{%endblock%}
+                </div>
+                <div class="col-sm-4">
+                    {%block midcolumn%}{%endblock%}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+
+    <footer>
+        <hr>
+        <div class="container p-3">
+            <div class="row d-flex justify-content-center">
+                <div>RUET<b>CMS</b><sup>β</sup></div><br>
+            </div>
+            <div class="row d-flex justify-content-center">
+                <div style="font-size: 12px;">All rights reserved</div>
+            </div>
+            <div class="row d-flex justify-content-center mt-1">
+                <img src="https://hitcounter.pythonanywhere.com/count/tag.svg" alt="Hits">
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap and JQuery Supports -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+
+    {% block script %} {% endblock %}
+</body>
+
+</html>

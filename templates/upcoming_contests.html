@@ -1,0 +1,34 @@
+{% extends 'defaults/authlayout.html' %}
+{% block title %} Generated Ranklist {%endblock%}
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+    <i class="fas fa-info-circle"></i> {{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<div class="card bg-white table-bordered mb-4 ">
+    <div class="card-body p-5">
+        <h5 class="card-title mb-4">
+            <div class="mr-auto">Upcoming Contests</div>
+        </h5>
+
+        <div id="upcoming-contests"></div>
+
+        <div class="mt-2">
+            <a href="{{request.referrer}}" class="card-link"><i class="fas fa-arrow-left pr-2"></i> Back</a>
+        </div>
+    </div>
+</div>
+{%endblock%}
+{%block script%}
+
+{% include './scripts/upcoming_contests_page.html' %}
+
+{%endblock%}

@@ -23,7 +23,7 @@
             let title = '<a href="' + val['href'] + '" data-toggle="tooltip" data-placement="top" title="Topcoder"><h5>' + val['name'] + '</h5></a>';
             let starts_in = '<p> Starts in <span id="count-down">' + val['start'] + ' </span></p>';
 
-            $('#upcoming-contests').append('<div id="' + it.toString() + '">' + title + starts_in + '<span onclick="createPost(this)" id="create-post" style="cursor: pointer">Create Post</span></div><hr>');
+            $('#upcoming-contests').append('<div id="' + it.toString() + '">' + title + starts_in + '<span style="font-size:12px" onclick="createPost(this)" id="create-post" style="cursor: pointer">Create Post</span></div><hr>');
             it++;
         });
 
@@ -37,7 +37,7 @@
         let id = textAreaLoc.attr('id');
 
         let textAreaContent = `
-<textarea class="form-control" rows="4">
+<textarea class="form-control" rows="6">
 ${DATA[id - 1]['name']}
 
 Starts: ${DATA[id - 1]['date']}

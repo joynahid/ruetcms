@@ -12,7 +12,7 @@
     let notok = true;
 
     DATA = JSON.parse(localStorage.getItem('uc__'));
-    if (DATA.length) {
+    if (DATA) {
         $('#upcoming-contests').html("");
         let it = 1;
         $.each(DATA, function (key, val) {

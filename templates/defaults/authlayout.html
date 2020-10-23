@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 
-<<<<<<< HEAD
 {% include './plugins/head.html' %}
 
 <body>
@@ -11,66 +10,20 @@
 
     <!-- Page Content -->
     <section class="py-3">
-=======
-<head>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-    <title>
-        {%block title%}{%endblock%}
-    </title>
-    {%block head%}{%endblock%}
-</head>
-
-<body style="font-family: Ubuntu;">
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed">
-        <div class="container">
-            <a class="navbar-brand" href="{{url_for('home')}}" style="font-size: 25px">RUET<b>CMS</b><sup>β</sup></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
-                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{{url_for('home')}}">Home
-                            <span class="sr-only">(current)</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('profile', username = auth['personal']['username'])}}"
-                            style="text-transform: capitalize; color:dodgerblue">{{ auth['personal']['firstname'] }}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link rounded" style="color: red" href="{{ url_for('logout') }}">Sign Out</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <!-- Page Content -->
-    <section class="py-5">
->>>>>>> 66894d29abca90a0e11a4c213d858d344b7ac9af
         <div class="container">
             {%block fullcontent%}{%endblock%}
             <div class="row">
                 <div class="col-sm-9">
                     {%block content%}{%endblock%}
                 </div>
-<<<<<<< HEAD
                 <div class="col-sm-3" style="position: -webkit-sticky; /* Safari */
                 position: sticky;
                 top: 0;">
-=======
-                <div class="col-sm-3">
->>>>>>> 66894d29abca90a0e11a4c213d858d344b7ac9af
                     {%block sidebar%}{%endblock%}
                 </div>
             </div>
         </div>
     </section>
-<<<<<<< HEAD
 
     <!-- Footer -->
 
@@ -87,20 +40,8 @@
 
     {% include './plugins/scripts.html' %}
 
-=======
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
->>>>>>> 66894d29abca90a0e11a4c213d858d344b7ac9af
     {% block script %} {% endblock %}
 </body>
 
 </html>
+

@@ -225,7 +225,10 @@ def upcomingContest():
 
 @app.route('/upcoming_contests')
 def upcomingContestPage():
-    return render_template('upcoming_contests.html', user= session['userHandle'])
+    if Authenticate():
+        return render_template('upcoming_contests.html', user= session['userHandle'])
+    
+    return render_template('upcoming_contests.html')
 
 if __name__ == '__main__':
     app.run()

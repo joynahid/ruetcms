@@ -28,6 +28,8 @@
 
         htmldata = ""
 
+        let i=0;
+        let len = dat.length
         $.each(dat, function(key, data){
             uri = '<span class="disqus-comment-count" data-disqus-identifier="'+ data.id +'"></span>'
 
@@ -37,7 +39,9 @@
             text = '<div class="card-text bangla-font">'+ data.text.substring(0, Math.min(200, data.text.length)).trim().replace(/[*#\'\"`']{0,200}/gim, "") + '</div>'
             details = '<a href="' + '/blog/post/' + data.id + '">' + 'See full article</a>'
             
-            htmldata+= bodystart + title + author + text + '&gt; ' + details + '</div>'
+            htmldata+= bodystart + title + author + text + '</div>'
+            i++;
+            if(i != len) htmldata+= '<hr>'
         })
 
         $('#blogposts').hide().html(htmldata).fadeIn('slow')

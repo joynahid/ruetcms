@@ -18,14 +18,14 @@
         $.each(DATA, function (key, val) {
             notok = false;
             let title = '<a href="' + val['href'] + '" data-toggle="tooltip" data-placement="top" title="' + val['platform'] + '">' + '<h5>[' + val['platform'] + '] ' + val['name'] + '</h5></a></p>';
-            let starts_in = `<p> ${val['start'] != 'Running' ? 'Starts in' : ''} <span id="count-down">` + val['start'] + ' </span></p>';
+            let starts_in = `<p> ${val['start'] != 'Running' ? 'Starts in' : ''} <span id="count-down">` + val['date'] + ' </span></p>';
 
             $('#upcoming-contests').append('<div id="' + it.toString() + '">' + title + starts_in + '<span style="font-size:12px; cursor: pointer" onclick="createPost(this)" id="create-post" style="cursor: pointer">Create Post</span></div><hr>');
             it++;
         });
     }
-    else
-        retrieveContests();
+
+    retrieveContests();
 
     $('#refresh_uc').click(function(){
         retrieveContests();
@@ -33,19 +33,19 @@
     });
 
     function retrieveContests() {
+        $('#upcoming-contests').prepend("<p style='color:gray'>Syncing...</p>");
+
         $.getJSON(RETRIEVE_URL, function (dat, status) {
             $('#refresh_uc').removeClass('fa-spin');
-
-            console.log(status)
-
+            $('#upcoming-contests').html("");
             DATA = dat;
             let it = 1;
             $.each(dat, function (key, val) {
                 notok = false;
-                let title = '<a href="' + val['href'] + '" data-toggle="tooltip" data-placement="top" title="' + val['platform'] + '">' + '<h5>[' + val['platform'] + '] ' + val['name'] + '</h5></a></p>';
-                let starts_in = `<p> ${val['start'] != 'Running' ? 'Starts in' : ''} <span id="count-down">` + val['start'] + ' </span></p>';
+                let title = '<a href="' + val['href'] + '" data-toggle="tooltip" data-placement="top" title="' + val['platform'] + '">' + '<h5>' + val['name'] + '</h5></a></p>';
+                let starts_in = `<p> ${val['start'] != 'Running' ? 'Starts in' : ''} <span id="count-down">` + val['date'] + ' </span></p>';
 
-                $('#upcoming-contests').append('<div id="' + it.toString() + '">' + title + starts_in + '<span style="font-size:12px; cursor: pointer" onclick="createPost(this)" id="create-post" style="cursor: pointer">Create Post</span></div><hr>');
+                $('#upcoming-contests').append('<div id="' + it.toString() + '">' + title + starts_in + '<span style="font-size:12px; cursor: pointer" onclick="createPost(this)" id="create-post" style="cursor: pointer">Create Post</span></div><hr>').fadeIn('slow');
                 it++;
             });
 
@@ -55,6 +55,23 @@
                 $('#upcoming-contests').html("No upcoming contest");
             }
         });
+    }
+
+
+    function copyText(el){
+        console.log(el);
+        let ele = $(el).parent().attr('id');
+        
+        let tArea = $("#\\3"+ele.toString()+' > textarea');
+
+        console.log(tArea);
+
+        tArea.focus();
+        tArea.select();
+        
+        document.execCommand("copy");
+
+        $(el).html('<i class="fas fa-copy p-3"></i>');
     }
 
     function createPost(el) {
@@ -71,6 +88,8 @@ Duration: ${DATA[id - 1]['duration']}
 
 Link: ${DATA[id - 1]['href']}
 </textarea>
+
+<span style="font-size: 18px;cursor:pointer" id="copy-${id}" onclick="copyText(this)"><i class="far fa-copy p-3"></i></span>
             `;
 
         textAreaLoc.html(textAreaContent.toString());

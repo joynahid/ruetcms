@@ -97,6 +97,10 @@ def vjInfoQuery(db):
     for doc in docs:
         d = doc.to_dict()
 
+        ln = len(d['title'])
+
+        if ln>50: d['title'] = d['title'][0:40] + '...'
+
         info = {
             'id' : doc.id,
             'title' : d['title'],

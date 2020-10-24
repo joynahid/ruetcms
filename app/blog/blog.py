@@ -38,7 +38,7 @@ def blogpost():
         doc = None
 
         try:
-            db.collection('articles').order_by(
+            doc = db.collection('articles').order_by(
                 'timestamp', direction=firestore.Query.DESCENDING).limit(1).stream()
         except: pass
 

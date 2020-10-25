@@ -29,10 +29,11 @@
         htmldata = ""
 
         $.each(dat, function(key, data){
-            title = '<span class="card-title"><a href="/blog/post/'+ data.id +'">' + data.title +'</a> > </span>'
-            details = '<a href="' + '/blog/post?post_id=' + data.id + '">' + 'Edit</a>'
+            title = '<span class="card-title"><a href="/blog/post/'+ data.id +'">' + data.title +'</a> > </span>';
+            details = '<a href="' + '/blog/post?post_id=' + data.id + '">' + 'Edit</a>';
+            del = '<a href="' + '/blog/post/delete/' + data.id + '">' + 'Delete</a>';
             
-            htmldata+= title + details + '<hr>'
+            htmldata+= title + details + ' | ' + del + '<hr>'
         })
 
         $('#blog-posting-activity').hide().html(htmldata).fadeIn('slow')

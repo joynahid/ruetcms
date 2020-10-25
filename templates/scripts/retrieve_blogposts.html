@@ -36,10 +36,17 @@
             bodystart = '<div id="' + data.id +  '" class="card-body">'
             title = '<h4 class="card-title"><a href="/blog/post/'+ data.id +'">' + data.title +'</a></h4>'
             author = '<div class="card-text mb-3" style="font-size:14px">Written by '+ '<a href="/profile/' + data.author + '">' + data.author + '</a>' + uri + '</div>'
-            text = '<div class="card-text bangla-font">'+ data.text.substring(0, Math.min(200, data.text.length)).trim().replace(/[*#\'\"`']{0,200}/gim, "") + '</div>'
+            text = `<div class="card-text bangla-font" id="data-${i}">`+ data.text.substring(0, Math.min(200, data.text.length)).trim().replace(/[*#$\\\\/`]{0,500}/gimu, "") + '</div>'
             details = '<a href="' + '/blog/post/' + data.id + '">' + 'See full article</a>'
+            tags = `<p style="color:gray; padding-top:5px">`
             
-            htmldata+= bodystart + title + author + text + '</div>'
+            $.each(data.tags, function(k, val){
+                tags+='#'+ val.trim() + '\t';
+            })
+
+            tags+='</p>'
+            
+            htmldata+= bodystart + title + author + text + tags + '</div>'
             i++;
             if(i != len) htmldata+= '<hr>'
         })

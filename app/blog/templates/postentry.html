@@ -39,7 +39,7 @@
 
         <hr>
 
-        <label class="input-group-label">Headline</label>
+        <label class="input-group-label bangla-font">Headline</label>
         <input class="input-group p-2 mb-3" style="font-size: 18px; border:1px solid #ccc" id='title' type="text"
             name="title" placeholder="১০০ টি অক্ষরের ভেতরে একটি প্রাসঙ্গিক শিরোনাম লেখ"
             value="{{article['title'] if article is defined }}" required />
@@ -47,12 +47,22 @@
         <label class="input-group-label">Article</label>
         <!-- Create the editor container -->
         <div>
-            <textarea id="editor" class="form-control py-2 mb-3" style="width: 100%; height: 500px;">{% if article is defined %}{{ article['text'] }}{%else%}
-# This is a heading
-## This is another heading
+            <textarea id="editor" class="form-control py-2 mb-3 bangla-font" style="width: 100%; height: 500px;">{% if article is defined %}{{ article['text'] }}{%else%}
+##Write heading by starting a line with double hash
 
 **Bold Text**
-_Underlined Text_
+
+Inline math text \(\latex\)
+
+```
+#include <stdio.h>
+
+int main() {
+    printf("Hello World\n");
+    return 0;
+}
+```
+
 {%endif%}</textarea>
         </div>
 

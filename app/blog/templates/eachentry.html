@@ -26,85 +26,43 @@
         margin-bottom: 0.5em;
     }
 
+    .code,
     code {
-        padding: 0 3px;
-        border-radius: 4px;
-        background: #f1f1f1;
-    }
-
-    pre.code {
-        font-size: 90%;
-        padding: 10px;
         border-radius: 5px;
-        background: #f6f8fa;
-        line-height: 1.5;
+        color: rgb(70, 70, 70);
+        background-color: #e7f1ee;
     }
 
-    h1:nth-child(1) {
-        margin-top: 0px;
+    .code {
+        padding: 1em;
     }
 
     h1 {
-        font-size: 28px;
+        font-size: 32px;
     }
 
-    #article_place h1 {
-        border-bottom: 1px solid #eeeeee !important;
-        margin-bottom: 4px !important;
-        padding-bottom: 8px;
+    #article_place h2 {
         font-size: 24px;
     }
 
-    h2 {
-        font-size: 20px;
-    }
-
-    h3 {
-        font-size: 18px;
-    }
-
-    h4 {
-        font-size: 15px;
-    }
-
-    h5 {
-        font-size: 12px;
-    }
-
-    h6 {
-        font-size: 8px;
-    }
-
-    .h1,
-    .h2,
-    .h3,
-    .h4,
-    .h5,
-    .h6,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-        margin-top: 1em;
-        margin-bottom: 6px;
+    b {
+        font-weight: bold;
     }
 </style>
 
 <div class="container-fluid mt-0">
     <div class="container">
-        <div class="ml-3 pt-4">
+        <div class="card pl-3 pt-4 border-0 pb-3 mt-4">
             <div class="pl-2">
                 <h1 class="mb-1 bangla-font">{{ post.title }}</h1>
-                <div class="card-text mb-4" style="font-size:14px; font-weight: normal; color: gray;">Written by <a
-                        href="\profile\{{post.author}}">{{post.author}}</a> on {{post.timestamp}}</div>
+                <!-- <div class="card-text mb-4" style="font-size:14px; font-weight: normal; color: gray;">Written by <a
+                        href="\profile\{{post.author}}">{{post.author}}</a> on {{post.timestamp}}</div> -->
             </div>
         </div>
 
-        <div class="card border-0" style="border-radius: 5px; font-size: 16px;">
+        <div class="card border-0 shadow-cs" style="border-radius: 5px; font-size: 16px;">
             <div class="card-body">
-                <div id='article_place' class="card-text bangla-font">{{ post.text[0:(post.text|length-1)] }}</div>
+                <div id='article_place' class="card-text bangla-font">{{ post.text | safe}}</div>
             </div>
         </div>
 
@@ -115,16 +73,11 @@
 {% endblock %}
 
 {% block script %}
-<script src="https://unpkg.com/snarkdown@2.0.0/dist/snarkdown.umd.js"></script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 <script>
-    let md = $('#article_place').text()
-    html = snarkdown(md)
-
-    console.log(md)
-
-    $('#article_place').html(html);
-
     var disqus_config = function () {
 
         let PAGE_URL = window.location.href
@@ -142,6 +95,7 @@
         (d.head || d.body).appendChild(s);
     })();
 </script>
+
 
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
         Disqus.</a></noscript>

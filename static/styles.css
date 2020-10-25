@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Catamaran&display=swap');
 
 @font-face {
   font-family: 'Solaiman Lipi';
@@ -18,7 +19,8 @@
 }
 
 .bangla-font{
-  font-family: 'Roboto', 'Solaiman Lipi';
+  font-family: 'Catamaran', 'Solaiman Lipi', serif;
+  letter-spacing: 0.65px;
 }
 
 body {

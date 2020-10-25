@@ -21,9 +21,7 @@
 <style>
     /** Markdown styling */
     br {
-        content: 'A';
-        display: block;
-        margin-bottom: 0.5em;
+        margin-bottom: 0.2em;
     }
 
     .code,
@@ -31,7 +29,7 @@
         border-radius: 5px;
         color: rgb(70, 70, 70);
         background-color: #e7f1ee;
-        line-height: 1.4;
+        line-height: 1.2;
     }
 
     .code {
@@ -39,17 +37,26 @@
     }
 
     h1 {
-        font-size: 28px;
+        font-size: 26px;
     }
 
-    #article_place h2 {
+    #article_place h3 {
         padding-top: 10px;
-        font-size: 24px;
+        font-size: 20px;
         padding-bottom: 6px;
+        font-weight: bold;
     }
 
     b {
         font-weight: bold;
+    }
+
+    @media screen and (max-device-width: 480px) {
+        .container{
+            width: 100%;
+            margin: 0px;
+            padding: 0px;
+        }
     }
 </style>
 

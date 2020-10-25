@@ -10,7 +10,7 @@ BOLD = (
 )
 
 HEAD = (
-    '<h2>','</h2>'
+    '<h3>','</h3>'
 )
 
 LINK = (
@@ -32,6 +32,9 @@ class textFactory:
 
         return self.data
 
+    def newLine(self):
+        nLn = re.finditer(r'')
+
     def tokenize(self):
         boldTexts = re.finditer(r'(\*{2}[\w\W]+?\*{2})', self.data, flags = re.I|re.M)
 
@@ -39,7 +42,7 @@ class textFactory:
             rng = e.span()
             self.markdown[rng[0]] = 'b',rng
 
-        headTexts = re.finditer(r'(^##.+?$)', self.data, flags = re.I|re.M)
+        headTexts = re.finditer(r'(^##.+?\n*$)', self.data, flags = re.I|re.M)
 
         for e in headTexts:
             rng = e.span()
@@ -61,6 +64,7 @@ class textFactory:
         htmlData = ''
 
         self.tokenize()
+        self.escape()
 
         n = len(self.data)
         i = 0
@@ -74,7 +78,7 @@ class textFactory:
                 i = whatToDo[1][1]-1
 
             elif whatToDo[0] == 'h':
-                htmlData+= HEAD[0] + self.data[whatToDo[1][0]+2:whatToDo[1][1]] + HEAD[1]
+                htmlData+= HEAD[0] + self.data[whatToDo[1][0]+2:whatToDo[1][1]].strip().strip('\n') + HEAD[1]
                 i = whatToDo[1][1]-1
 
             elif whatToDo[0] == 'l':
@@ -84,8 +88,9 @@ class textFactory:
                 htmlData+= CODE[0] + self.data[whatToDo[1][0]+3:whatToDo[1][1]-3].strip('\n') + CODE[1]
                 i = whatToDo[1][1]-1
 
+            if whatToDo !=-1: print(whatToDo)
             i+=1
 
-        htmlData = htmlData.replace('\n','<br/>')
+        htmlData = re.sub(r'(</h3>\n*)', '</h3>', htmlData, flags = re.I|re.M).replace('\n','<br/>')
 
         return htmlData

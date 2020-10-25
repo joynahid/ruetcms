@@ -15,8 +15,6 @@ db = firestore.client()
 def post(entry_uid):
     post = db.collection('articles').document(entry_uid).get().to_dict()
 
-    print(repr(post['text']))
-
     txtProcess = textFactory(post['text'])
     post['text'] = txtProcess.htmlify()
 
@@ -39,9 +37,6 @@ def blogpost():
         title = request.form['title'].title()
         tags = request.form['tags']
         author = request.form['author']
-
-        txtProcess = textFactory(text)
-        text = txtProcess.escape()
 
         time = firestore.SERVER_TIMESTAMP
         doc = None

@@ -149,12 +149,23 @@ int main() {
 
     $("#hitpost").click(function () {
 
-        html_data = $('#editor').val()
+        let title = $('#title').val()
+        let isTitleNotOk = title.match(/[!@#$%^&*(),.?":{}|<>]/gim);
 
-        console.log(html_data)
+        if(!title || isTitleNotOk)
+        {
+            Alert("Title is either empty or contains special characters!", "danger");
+            return;
+        }
+
+        html_data = $('#editor').val()
 
         let url = new URL(window.location.href);
         let uid = url.searchParams.get("post_id");
+
+        $(this).attr('disabled');
+
+
 
         $.ajax({
             type: 'POST',
@@ -164,10 +175,10 @@ int main() {
                 'text': html_data,
                 'tags': $('#tags').val(),
                 'author': $('#author').val(),
-                'uid': uid.toString()
+                'uid': uid?uid.toString():null
             },
             error: function (e) {
-                Alert('Erro ' + e.status + "! " + e.statusText, 'danger');
+                Alert('Error ' + e.status + "! " + e.statusText, 'danger');
             },
             success: function (e) {
                 window.location.href = `post/${e.post_id}`;

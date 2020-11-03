@@ -6,17 +6,20 @@ import os
 import random
 import markdown2
 
-md = markdown2.Markdown(extras = ['code-friendly','fenced-code-blocks','spoiler','target-blank-links'])
+md = markdown2.Markdown(extras=[
+                        'code-friendly', 'fenced-code-blocks', 'spoiler', 'target-blank-links', 'strike'])
 
-blog = Blueprint('blog', __name__, template_folder='templates', static_folder='/static')
+blog = Blueprint('blog', __name__, template_folder='templates',
+                 static_folder='/static')
 
 db = firestore.client()
+
 
 @blog.route('/post/<entry_uid>')
 def post(entry_uid):
     post = db.collection('articles').document(entry_uid).get().to_dict()
 
-    post['text'] = md.convert(post['text'])
+    post['text'] = md.convert(post['text'][0])
     post['text'] = Markup(post['text'])
 
     if Authenticate():
@@ -24,9 +27,11 @@ def post(entry_uid):
 
     return render_template('eachentry.html', post=post, entry_uid=entry_uid)
 
+
 @blog.route('/')
 def blogview():
     return render_template('blog.html')
+
 
 @blog.route('/post', methods=['GET', 'POST'])
 def blogpost():
@@ -36,26 +41,38 @@ def blogpost():
         tags = request.form['tags']
         author = request.form['author']
 
+        if not title:
+            return make_response({'status': 406})
+
         time = firestore.SERVER_TIMESTAMP
         doc = None
 
         try:
             doc = db.collection('articles').order_by(
                 'timestamp', direction=firestore.Query.DESCENDING).limit(1).stream()
-        except: pass
+        except:
+            pass
 
         uid = None
 
         make_data = {
             'title': title,
-            'text': text,
+            'text': [text],
             'author': author,
             'timestamp': time
         }
 
         if request.form['uid']:
             uid = request.form['uid']
+            try:
+                docc = db.collection('articles').document(str(uid)).get().to_dict()
+            except:
+                return make_response({'status':403, 'msg': 'No Post Found'})
+
+            docc['text'].append(text)
+
             make_data.update({
+                'text': docc['text'],
                 'isEdited': True,
                 'id': int(uid)
             })
@@ -80,7 +97,7 @@ def blogpost():
 
         db.collection('articles').document(str(uid)).set(make_data)
 
-        return make_response({'status': 200, 'post_id':uid})
+        return make_response({'status': 200, 'post_id': uid})
 
     if Authenticate():
         edit_post_id = request.args.get('post_id')
@@ -118,15 +135,18 @@ def retposts():
     for doc in docs:
         rdoc = doc.to_dict()
 
+        rdoc['text'] = rdoc['text'][-1]
+
         # print(rdoc)
         data.append(rdoc)
 
     return jsonify(data)
 
+
 @blog.route('/post/delete/<id>')
 def delete_post(id):
     if Authenticate():
-        docs = db.collection('articles').where(u'id',u'==',int(id)).stream()
+        docs = db.collection('articles').where(u'id', u'==', int(id)).stream()
 
         # print(docs)
         # print(session['userHandle']['username'])
@@ -138,9 +158,9 @@ def delete_post(id):
 
             if data['author'] == session['userHandle']['username']:
                 doc.reference.delete()
-                flash('Deleted','success')
+                flash('Deleted', 'success')
                 return redirect(request.referrer)
-    
+
     return 'failed'
 
 
@@ -154,9 +174,11 @@ def retindposts():
     for doc in docs:
         rdoc = doc.to_dict()
 
+        rdoc['text'] = rdoc['text'][-1]
+
         # print(doc.id)
 
-        # print(rdoc)
+        print(rdoc)
         data.append(rdoc)
 
     return jsonify(data)

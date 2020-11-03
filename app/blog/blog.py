@@ -178,7 +178,7 @@ def retindposts():
 
         # print(doc.id)
 
-        print(rdoc)
+        # print(rdoc)
         data.append(rdoc)
 
     return jsonify(data)

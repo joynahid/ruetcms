@@ -1,24 +1,22 @@
 from flask import Blueprint, url_for, render_template, request, make_response, redirect, flash, jsonify, session, Markup, escape
 from firebase_admin import firestore
 from app.app_auth.auth import Authenticate
-from app.blog.clearence.text_factory import textFactory
+# from app.blog.clearence.text_factory import textFactory
 import os
 import random
+import markdown2
 
-blog = Blueprint('blog', __name__, template_folder='templates',
-                 static_folder='/static')
+md = markdown2.Markdown(extras = ['code-friendly','fenced-code-blocks','spoiler','target-blank-links'])
+
+blog = Blueprint('blog', __name__, template_folder='templates', static_folder='/static')
 
 db = firestore.client()
-
 
 @blog.route('/post/<entry_uid>')
 def post(entry_uid):
     post = db.collection('articles').document(entry_uid).get().to_dict()
 
-    txtProcess = textFactory(post['text'])
-    post['text'] = txtProcess.htmlify()
-
-    post['title'] = post['title']
+    post['text'] = md.convert(post['text'])
     post['text'] = Markup(post['text'])
 
     if Authenticate():
@@ -80,11 +78,9 @@ def blogpost():
                 'id': int(uid)
             })
 
-        print(make_data)
-
         db.collection('articles').document(str(uid)).set(make_data)
 
-        return make_response({'status': 200})
+        return make_response({'status': 200, 'post_id':uid})
 
     if Authenticate():
         edit_post_id = request.args.get('post_id')
@@ -104,7 +100,7 @@ def blogpost():
                 except:
                     article['tags'] = ''
 
-                return render_template('postentry.html', user=session['userHandle'], article=article)
+                return render_template('postentry.html', user=session['userHandle'])
 
         return render_template('postentry.html', user=session['userHandle'])
 
@@ -122,8 +118,6 @@ def retposts():
     for doc in docs:
         rdoc = doc.to_dict()
 
-        print(doc.id)
-
         # print(rdoc)
         data.append(rdoc)
 
@@ -134,13 +128,13 @@ def delete_post(id):
     if Authenticate():
         docs = db.collection('articles').where(u'id',u'==',int(id)).stream()
 
-        print(docs)
-        print(session['userHandle']['username'])
+        # print(docs)
+        # print(session['userHandle']['username'])
 
         for doc in docs:
             data = doc.to_dict()
 
-            print(data)
+            # print(data)
 
             if data['author'] == session['userHandle']['username']:
                 doc.reference.delete()
@@ -160,7 +154,7 @@ def retindposts():
     for doc in docs:
         rdoc = doc.to_dict()
 
-        print(doc.id)
+        # print(doc.id)
 
         # print(rdoc)
         data.append(rdoc)

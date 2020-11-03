@@ -1,8 +1,11 @@
 import re
 
 HTML_ESC = [
-    ('<','&lt'),
-    ('>','&gt')
+    ('<','&lt;'),
+    ('>','&gt;'),
+    ('/','&#47;'),
+    ('\\','&#92;'),
+    ('& ','&#38;'),
 ]
 
 BOLD = (
@@ -32,8 +35,10 @@ class textFactory:
 
         return self.data
 
-    def newLine(self):
-        nLn = re.finditer(r'')
+    def isTitle(self, str):
+        ok = True
+
+        return ok
 
     def tokenize(self):
         boldTexts = re.finditer(r'(\*{2}[\w\W]+?\*{2})', self.data, flags = re.I|re.M)
@@ -60,11 +65,32 @@ class textFactory:
             rng = e.span()
             self.markdown[rng[0]] = 'c',rng
 
-    def htmlify(self):
+    def makeBold(self):
+        boldText = ''
+        n = len(self.data)
+        i = 0
+        while i<n:
+            whatToDo = -1 if i not in self.markdown else self.markdown[i]
+
+            if whatToDo == -1: boldText+=self.data[i]
+
+            elif whatToDo[0] == 'b':
+                boldText+= BOLD[0] + self.data[whatToDo[1][0]+2:whatToDo[1][1]-2] + BOLD[1]
+                i = whatToDo[1][1]-1
+
+            if whatToDo !=-1: print(whatToDo)
+            i+=1
+
+        self.data = boldText
+
+        print('Bold ', self.data)
+
+    def serveHtml(self):
         htmlData = ''
 
-        self.tokenize()
         self.escape()
+        self.tokenize()
+        self.makeBold()
 
         n = len(self.data)
         i = 0
@@ -73,10 +99,6 @@ class textFactory:
 
             if whatToDo == -1: htmlData+=self.data[i]
 
-            elif whatToDo[0] == 'b':
-                htmlData+= BOLD[0] + self.data[whatToDo[1][0]+2:whatToDo[1][1]-2] + BOLD[1]
-                i = whatToDo[1][1]-1
-
             elif whatToDo[0] == 'h':
                 htmlData+= HEAD[0] + self.data[whatToDo[1][0]+2:whatToDo[1][1]].strip().strip('\n') + HEAD[1]
                 i = whatToDo[1][1]-1
@@ -84,6 +106,7 @@ class textFactory:
             elif whatToDo[0] == 'l':
                 htmlData+= LINK[0] + self.data[whatToDo[1][0]:whatToDo[1][1]] + '">' + self.data[whatToDo[1][0]:whatToDo[1][1]] + LINK[1]
                 i = whatToDo[1][1]-1
+
             elif whatToDo[0] == 'c':
                 htmlData+= CODE[0] + self.data[whatToDo[1][0]+3:whatToDo[1][1]-3].strip('\n') + CODE[1]
                 i = whatToDo[1][1]-1

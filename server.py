@@ -8,6 +8,7 @@ from app.app_analyzer.analyzer import generateFavorite, generateContestPerforman
 from app.blog.blog import blog
 from network.clist_api import clistApi
 from datetime import datetime as dt
+from flask_cors import cross_origin
 
 app = Flask(__name__, template_folder='templates')
 app.config.from_pyfile('config.py')
@@ -156,6 +157,7 @@ def vjudgeList():
     return render_template('vjudgelist.html')
 
 @app.route('/api/v1/upcomingcontests')
+@cross_origin(origins = r'https://ruetcms.herokuapp.com/*')
 def upcomingContest():
     try:
         FILTER_CONTEST_SITE = ['codeforces', 'toph', 'topcoder', 'codechef', 'atcoder','leetcode','hackerrank']

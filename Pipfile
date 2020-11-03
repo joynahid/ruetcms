@@ -12,8 +12,12 @@ requests-html = "*"
 gunicorn = "*"
 beautifulsoup4 = "*"
 selenium = "*"
+flask-cors = "*"
+markdown2 = "*"
+pygments = "*"
 
 [dev-packages]
+pylint = "*"
 
 [requires]
 python_version = "3.8"

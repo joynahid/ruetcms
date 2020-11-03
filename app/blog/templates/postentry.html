@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<div class="alert alert-dismissible fade show" style="display: none;" role="alert">
+<div id="alert" style="display: none;" role="alert">
     <i class="fas fa-info-circle"></i> {{ message }}
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
@@ -12,48 +12,82 @@
 </div>
 
 <style>
-    #editor {
-        font-size: 18px;
-        border-left: 2px solid #ccc;
-        border-right: 2px solid #ccc;
-        border-bottom: 2px solid #ccc;
+    /** Markdown styling */
+    br {
+        margin-bottom: 0.2em;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+    #article_place h3 {
+        padding-top: 10px;
+        font-size: 20px;
+        padding-bottom: 6px;
+        font-weight: bold;
+    }
+
+    b {
+        font-weight: bold;
+    }
+
+    @media screen and (max-device-width: 480px) {
+        .container{
+            width: 100%;
+            margin: 0px;
+            padding: 0px;
+        }
+    }
+
+    #editor{
+        font-size: 14px;
     }
 </style>
 
-<div class="card border-0">
+<div class="card border-0 shadow-cs">
     <div class="card-body">
 
         <h5 class="card-title mb-4">
-            Write a blog
+            Write an Article
         </h5>
 
         <hr>
 
         <div class="card-text">
-            <h5>কিছু পরামর্শ</h5>
+            <h5>Supports</h5>
             <p>
-                কপি পেস্ট কন্টেন্ট পোস্ট করা নিষিদ্ধ।
-                সুন্দর ফরম্যাটে লেখা বাঞ্চনীয়। গুরুত্বপূর্ণ তথ্য <b>বোল্ড</b> বা <u>আন্ডারলাইন</u> করে লেখ।
+                \LaTex{} Support
+            </p>
+            <p>
+                ## Heading Text
+            </p>
+
+            <p>
+                **Bold text**
+            </p>
+
+            <p>
+                ```code```
             </p>
         </div>
 
         <hr>
 
         <label class="input-group-label bangla-font">Headline</label>
-        <input class="input-group p-2 mb-3" style="font-size: 18px; border:1px solid #ccc" id='title' type="text"
-            name="title" placeholder="১০০ টি অক্ষরের ভেতরে একটি প্রাসঙ্গিক শিরোনাম লেখ"
+        <input class="form-control p-1 mb-3" style="font-size: 14px; border:1px solid #ccc" id='title' type="text"
+            name="title" placeholder="Write a Headline"
             value="{{article['title'] if article is defined }}" required />
 
         <label class="input-group-label">Article</label>
         <!-- Create the editor container -->
         <div>
-            <textarea id="editor" class="form-control py-2 mb-3 bangla-font" style="width: 100%; height: 500px;">{% if article is defined %}{{ article['text'] }}{%else%}
+            <textarea id="editor" class="form-control py-2 mb-3 bangla-font border-1" style="box-shadow: inset 0 0 3px #000000; width: 100%; height: 500px;">{% if article is defined %}{{ article['text'] }}{%else%}
 ##Write heading by starting a line with double hash
-
 **Bold Text**
 
-Inline math text \(\latex\)
-
+Inline math text \(\LaTeX{}\)
+Multiline math text \[\LaTeX{}\]
 ```
 #include <stdio.h>
 
@@ -67,11 +101,11 @@ int main() {
         </div>
 
         <label class="input-group-label">Keywords</label>
-        <input class="input-group p-2 mb-3" style="border:1px solid #ccc; font-size: 18px;" type="text" id='tags'
-            name="tags" placeholder="বিএফএস, গ্রাফ" value="{{article['tags'] if article is defined}}" required />
+        <input class="form-control p-1 mb-3" style="border:1px solid #ccc; font-size: 14px;" type="text" id='tags'
+            name="tags" placeholder="bfs, dfs, binary-search" value="{{article['tags'] if article is defined}}" required />
 
         <label class="input-group-label">Writer</label>
-        <input class="input-group p-2 mb-3" style="border:1px solid #ccc" id='author' type="text" name="author"
+        <input class="form-control p-2 mb-3" style="border:1px solid #ccc" id='author' type="text" name="author"
             placeholder="" value="{{ user['username'] }}" disabled />
 
         <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
@@ -86,8 +120,7 @@ int main() {
         <button id='hitpost' class="btn bg-info text-white">Post</button>
         <button id='draft' class="btn bg-info text-white">Save to draft</button>
         <button type="button" class="btn btn-primary" id="parse-button" data-toggle="modal"
-            data-target=".bd-example-modal-lg">See
-            Demo</button>
+            data-target=".bd-example-modal-lg">See Demo</button>
     </div>
 </div>
 
@@ -120,6 +153,9 @@ int main() {
 
         console.log(html_data)
 
+        let url = new URL(window.location.href);
+        let uid = url.searchParams.get("post_id");
+
         $.ajax({
             type: 'POST',
             url: "{{url_for('blog.blogpost')}}",
@@ -128,16 +164,13 @@ int main() {
                 'text': html_data,
                 'tags': $('#tags').val(),
                 'author': $('#author').val(),
-                'uid': '{{ article['edit_id'] if article is defined }}'
+                'uid': uid.toString()
             },
-            error: function () {
-                Alert('Something went wrong. Please try again later', 'danger')
+            error: function (e) {
+                Alert('Erro ' + e.status + "! " + e.statusText, 'danger');
             },
-            success: function () {
-                Alert('Post updated successfully. Rederecting you to the blog in 3 seconds', 'success')
-                window.setTimeout(function () {
-                    window.location.href = "{{ url_for('index') }}"
-                }, 3000);
+            success: function (e) {
+                window.location.href = `post/${e.post_id}`;
             }
         });
     })
@@ -151,11 +184,12 @@ int main() {
     })
 
     function Alert(msg, type) {
-        cls = 'alert' + type
-        scrollTo(0, 0)
-        $('.alert').text(msg)
-        $('.alert').addClass(cls)
-        $('.alert').fadeIn('slow')
+        cls = 'alert alert-dismissible fade show alert-' + type;
+        scrollTo(0, 0);
+        $('#alert').text(msg);
+        $('#alert').removeClass();
+        $('#alert').addClass(cls);
+        $('#alert').fadeIn('slow');
 
         return 1
     }

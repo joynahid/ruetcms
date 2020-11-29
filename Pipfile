@@ -15,6 +15,7 @@ selenium = "*"
 flask-cors = "*"
 markdown2 = "*"
 pygments = "*"
+humanize = "*"
 
 [dev-packages]
 pylint = "*"

@@ -41,7 +41,7 @@
     }
 
     #editor{
-        font-size: 14px;
+        font-size: 18px;
     }
 </style>
 
@@ -49,40 +49,39 @@
     <div class="card-body">
 
         <h5 class="card-title mb-4">
-            Write an Article
+            {{'Edit Article' if post is defined else 'Write Article'}}
         </h5>
+
+        {% if post is defined %}
+            <div role="alert">
+                <i class="fas fa-info-circle"></i>
+                You are editing "{{post.title}}"
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {%endif%}
 
         <hr>
 
         <div class="card-text">
             <h5>Supports</h5>
             <p>
-                \LaTex{} Support
-            </p>
-            <p>
-                ## Heading Text
-            </p>
-
-            <p>
-                **Bold text**
-            </p>
-
-            <p>
-                ```code```
+                Full Markdown & Latex Support
             </p>
         </div>
 
         <hr>
 
         <label class="input-group-label bangla-font">Headline</label>
-        <input class="form-control p-1 mb-3" style="font-size: 14px; border:1px solid #ccc" id='title' type="text"
+        <input class="form-control p-2 py-4 mb-3" style="font-size: 22px; border:1px solid #ccc" id='title' type="text"
             name="title" placeholder="Write a Headline"
-            value="{{article['title'] if article is defined }}" required />
+            value="{{post['title'] if post is defined }}" required />
 
         <label class="input-group-label">Article</label>
         <!-- Create the editor container -->
         <div>
-            <textarea id="editor" class="form-control py-2 mb-3 bangla-font border-1" style="box-shadow: inset 0 0 3px #000000; width: 100%; height: 500px;">{% if article is defined %}{{ article['text'] }}{%else%}
+            <textarea id="editor" class="form-control py-2 mb-3 bangla-font border-1" style="width: 100%; height: 500px;">{% if post is defined %}{{ post['text'][-1] }}{%else%}
 ##Write heading by starting a line with double hash
 **Bold Text**
 
@@ -102,7 +101,7 @@ int main() {
 
         <label class="input-group-label">Keywords</label>
         <input class="form-control p-1 mb-3" style="border:1px solid #ccc; font-size: 14px;" type="text" id='tags'
-            name="tags" placeholder="bfs, dfs, binary-search" value="{{article['tags'] if article is defined}}" required />
+            name="tags" placeholder="bfs, dfs, binary-search" value="{{post['tags'] if post is defined and post['tags'] is defined}}" required />
 
         <label class="input-group-label">Writer</label>
         <input class="form-control p-2 mb-3" style="border:1px solid #ccc" id='author' type="text" name="author"
@@ -165,8 +164,6 @@ int main() {
 
         $(this).attr('disabled');
 
-
-
         $.ajax({
             type: 'POST',
             url: "{{url_for('blog.blogpost')}}",
@@ -175,7 +172,7 @@ int main() {
                 'text': html_data,
                 'tags': $('#tags').val(),
                 'author': $('#author').val(),
-                'uid': uid?uid.toString():null
+                'uid': uid?uid.toString():''
             },
             error: function (e) {
                 Alert('Error ' + e.status + "! " + e.statusText, 'danger');

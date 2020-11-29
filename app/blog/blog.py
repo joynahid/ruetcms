@@ -1,10 +1,12 @@
-from flask import Blueprint, url_for, render_template, request, make_response, redirect, flash, jsonify, session, Markup, escape
+from flask import Blueprint, url_for, render_template, request, make_response, redirect, flash, jsonify, session, Markup, escape, abort
 from firebase_admin import firestore
 from app.app_auth.auth import Authenticate
 # from app.blog.clearence.text_factory import textFactory
 import os
 import random
 import markdown2
+import humanize
+import datetime
 
 md = markdown2.Markdown(extras=[
                         'code-friendly', 'fenced-code-blocks', 'spoiler', 'target-blank-links', 'strike'])
@@ -14,13 +16,29 @@ blog = Blueprint('blog', __name__, template_folder='templates',
 
 db = firestore.client()
 
-
 @blog.route('/post/<entry_uid>')
 def post(entry_uid):
     post = db.collection('articles').document(entry_uid).get().to_dict()
 
-    post['text'] = md.convert(post['text'][0])
+    if not post:
+        abort(404)
+
+    post['text'] = md.convert(post['text'][-1])
     post['text'] = Markup(post['text'])
+
+    s = str(post['timestamp'])
+    s = s.replace(s[s.index('.'):s.index('+')],'')
+
+    s = datetime.datetime.strptime(s,"%Y-%m-%d %H:%M:%S%z")
+    now = datetime.datetime.now(datetime.timezone.utc)
+
+    delta = now-s
+
+    naturalTime = humanize.naturaltime(delta)
+
+    # print(naturalTime)
+
+    post['timestamp'] = naturalTime
 
     if Authenticate():
         return render_template('eachentry.html', user=session['userHandle'], post=post, entry_uid=entry_uid)
@@ -31,7 +49,6 @@ def post(entry_uid):
 @blog.route('/')
 def blogview():
     return render_template('blog.html')
-
 
 @blog.route('/post', methods=['GET', 'POST'])
 def blogpost():
@@ -48,8 +65,7 @@ def blogpost():
         doc = None
 
         try:
-            doc = db.collection('articles').order_by(
-                'timestamp', direction=firestore.Query.DESCENDING).limit(1).stream()
+            doc = db.collection('articles').order_by('timestamp', direction=firestore.Query.DESCENDING).limit(1).stream()
         except:
             pass
 
@@ -67,9 +83,11 @@ def blogpost():
             try:
                 docc = db.collection('articles').document(str(uid)).get().to_dict()
             except:
-                return make_response({'status':403, 'msg': 'No Post Found'})
+                return make_response({'status':404, 'msg': 'No Post Found'})
 
             docc['text'].append(text)
+
+            print(docc)
 
             make_data.update({
                 'text': docc['text'],
@@ -103,21 +121,20 @@ def blogpost():
         edit_post_id = request.args.get('post_id')
 
         if edit_post_id:
-            article = db.collection('articles').document(
-                str(edit_post_id)).get().to_dict()
+            article = db.collection('articles').document(str(edit_post_id)).get().to_dict()
 
             if article:
-                try:
+                if article['author'] != session['userHandle']['username']:
+                    return 'Unauthorized',403
+
+                if 'tags' in article:
                     article['tags'] = str(article['tags'])
-                    article['tags'] = article['tags'][2:len(article['tags'])-2]
+                    article['tags'] = article['tags'].replace('[','').replace(']','').replace('"','')
 
-                    article['tags'].replace('\'', '')
-
+                if article:
                     article.update({'edit_id': edit_post_id})
-                except:
-                    article['tags'] = ''
-
-                return render_template('postentry.html', user=session['userHandle'])
+                    return render_template('postentry.html', user=session['userHandle'], post = article)
+            else: return 'No article Found',404
 
         return render_template('postentry.html', user=session['userHandle'])
 
@@ -127,8 +144,7 @@ def blogpost():
 
 @blog.route('/retrieveposts')
 def retposts():
-    docs = db.collection('articles').order_by(
-        'id', direction=firestore.Query.DESCENDING).stream()
+    docs = db.collection('articles').order_by('timestamp', direction=firestore.Query.DESCENDING).stream()
 
     data = []
 
@@ -136,6 +152,20 @@ def retposts():
         rdoc = doc.to_dict()
 
         rdoc['text'] = rdoc['text'][-1]
+
+        s = str(rdoc['timestamp'])
+        s = s.replace(s[s.index('.'):s.index('+')],'')
+
+        s = datetime.datetime.strptime(s,"%Y-%m-%d %H:%M:%S%z")
+        now = datetime.datetime.now(datetime.timezone.utc)
+
+        delta = now-s
+
+        naturalTime = humanize.naturaltime(delta)
+
+        # print(naturalTime)
+
+        rdoc['timestamp'] = naturalTime
 
         # print(rdoc)
         data.append(rdoc)
@@ -154,14 +184,12 @@ def delete_post(id):
         for doc in docs:
             data = doc.to_dict()
 
-            # print(data)
-
             if data['author'] == session['userHandle']['username']:
                 doc.reference.delete()
                 flash('Deleted', 'success')
                 return redirect(request.referrer)
 
-    return 'failed'
+    return 'Unauthorized'
 
 
 @blog.route('/retrieveindividualposts')
@@ -176,9 +204,20 @@ def retindposts():
 
         rdoc['text'] = rdoc['text'][-1]
 
-        # print(doc.id)
+        s = str(rdoc['timestamp'])
+        s = s.replace(s[s.index('.'):s.index('+')],'')
 
-        # print(rdoc)
+        s = datetime.datetime.strptime(s,"%Y-%m-%d %H:%M:%S%z")
+        now = datetime.datetime.now(datetime.timezone.utc)
+
+        delta = now-s
+
+        naturalTime = humanize.naturaltime(delta)
+
+        # print(naturalTime)
+
+        rdoc['timestamp'] = naturalTime
+
         data.append(rdoc)
 
     return jsonify(data)

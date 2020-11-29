@@ -33,10 +33,10 @@
         $.each(dat, function(key, data){
             uri = '<span class="disqus-comment-count" data-disqus-identifier="'+ data.id +'"></span>'
 
-            var details = '<a href="' + '/blog/post/' + data.id + '">' + 'Continue reading</a>'
+            var details = '<br><a href="' + '/blog/post/' + data.id + '">' + 'Continue reading</a>'
             bodystart = '<div id="' + data.id +  '" class="card-body">'
             title = '<h4 class="card-title"><a href="/blog/post/'+ data.id +'">' + data.title +'</a></h4>'
-            author = '<div class="card-text mb-3 text-black-50" style="font-size:14px">by '+ '<a href="/profile/' + data.author + '">' + data.author + '</a>' + uri + '</div>'
+            author = '<div class="card-text mb-3 text-black-50" style="font-size:12px">by '+ '<a href="/profile/' + data.author + '">' + data.author + '</a> · ' + data.timestamp + '</div>'
             text = `<div class="card-text bangla-font" id="data-${i}">`+ data.text.substring(0, Math.min(500, data.text.length)).trim().replace(/[*#$`-]{0,500}/gimu, "") + '...' + details + '</div>'
             tags = `<p style="color:gray; padding-top:5px">`
             

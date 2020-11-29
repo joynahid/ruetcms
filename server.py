@@ -83,9 +83,11 @@ def manager():
     return render_template('manager.html')
 
 # 404 Page
-@app.errorhandler(404)
+# @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html', noauth = 1)
+
+app.register_error_handler(404, page_not_found)
 
 @app.route('/performance', methods= ['GET',  'POST'])
 def performance():
